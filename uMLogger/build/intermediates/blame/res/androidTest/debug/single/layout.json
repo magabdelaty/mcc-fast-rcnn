@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\help.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\layout\\help.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\widget_configure.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\layout\\widget_configure.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\power_tabs.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\layout\\power_tabs.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\widget_layout.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\layout\\widget_layout.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\widget_item_layout.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\layout\\widget_item_layout.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\main.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\layout\\main.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\misc_layout.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\layout\\misc_layout.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\misc_item_layout.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\layout\\misc_item_layout.xml"
+    }
+]

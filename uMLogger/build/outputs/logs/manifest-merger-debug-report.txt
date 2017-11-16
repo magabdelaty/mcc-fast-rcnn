@@ -1,0 +1,61 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:2:1-93:12
+INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:2:1-93:12
+INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:2:1-93:12
+INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:2:1-93:12
+INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:2:1-93:12
+INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:2:1-93:12
+INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:2:1-93:12
+	package
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:3:7-37
+		INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml
+		INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml
+	android:versionName
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:4:32-57
+		INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml
+		INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:4:7-31
+		INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml
+		INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml
+uses-sdk
+ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:86:3-41
+INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:86:3-41
+INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:86:3-41
+INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:86:3-41
+INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:86:3-41
+	android:targetSdkVersion
+		INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:86:3-41
+		INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:86:13-38
+		INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml
+		INJECTED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml
+uses-permission#android.permission.INTERNET
+ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:87:3-65
+	android:name
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:87:20-62
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:88:3-77
+	android:name
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:88:20-74
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:89:3-74
+	android:name
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:89:20-71
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:90:3-73
+	android:name
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:90:20-70
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:91:3-77
+	android:name
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:91:20-74
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:92:3-79
+	android:name
+		ADDED from D:\git\MccObjectDetection\uMLogger\src\main\AndroidManifest.xml:92:20-76

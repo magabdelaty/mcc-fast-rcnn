@@ -1,0 +1,28 @@
+{
+  "provider_uuid": "ed66359e-faad-49ff-bacf-92bdfe2459ac",
+  "energyAvail": 0,
+  "memoryAvail": 0,
+  "computeSpeed": 0,
+  "avail_services": [
+    {
+      "android_service": "com.simplicity.maged.mccobjectdetection.services.ImageBlurringService",
+      "cloud_service": "image_process/blur/"
+    },
+    {
+      "android_service": "com.simplicity.maged.mccobjectdetection.services.ImageBlendingService",
+      "cloud_service": "image_process/blend/"
+    },
+    {
+      "android_service": "com.simplicity.maged.mccobjectdetection.services.MatrixMultiplyService",
+      "cloud_service": "arithmetic/matrix_multiply/"
+    },
+    {
+      "android_service": "com.simplicity.maged.mccobjectdetection.services.PrimeFactorsService",
+      "cloud_service": "arithmetic/prime_factors/"
+    },
+    {
+      "android_service": "com.simplicity.maged.mccobjectdetection.services.BubbleSortService",
+      "cloud_service": "arithmetic/bubble_sort/"
+    }
+  ]
+}

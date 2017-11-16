@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services>
+    <service>
+        <name>com.simplicity.maged.mccobjectdetection.services.ObjectDetectionService</name>
+    </service>
+    <service>
+        <name>com.simplicity.maged.mccobjectdetection.services.SceneRecognitionService</name>
+    </service>
+    <service>
+        <name>com.simplicity.maged.mccobjectdetection.services.SortPrimeService</name>
+        <leaf>com.simplicity.maged.mccobjectdetection.services.BubbleSortService</leaf>
+        <leaf>com.simplicity.maged.mccobjectdetection.services.PrimeFactorsService</leaf>
+    </service>
+</services>

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\viewer_preferences.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\xml\\viewer_preferences.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\preferences.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\xml\\preferences.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\widget_info.xml",
+        "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\xml\\widget_info.xml"
+    }
+]

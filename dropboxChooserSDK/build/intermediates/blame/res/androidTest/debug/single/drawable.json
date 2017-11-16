@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\common_bar_light_gray_bottom.xml",
+        "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\drawable\\common_bar_light_gray_bottom.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\common_button_green.xml",
+        "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\drawable\\common_button_green.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable\\common_button_light_gray.xml",
+        "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\drawable\\common_button_light_gray.xml"
+    }
+]

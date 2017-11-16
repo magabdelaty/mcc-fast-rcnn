@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '26.0.2'
+
+    defaultConfig {
+        applicationId "com.simplicity.maged.mccobjectdetection"
+        minSdkVersion 16
+        targetSdkVersion 23
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
+
+        ndk {
+            moduleName "NativeBlend"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
+    sourceSets { main { jni.srcDirs = ['src/main/jni', 'src/main/jniLibs'] } }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar', '*.so'], dir: 'libs')
+    compile project(':openCVLibrary300')
+    compile project(':volley')
+    compile project(':dropboxChooserSDK')
+    compile project(':uMLogger')
+    compile project(':cnnlibs')
+    compile files('libs/connectionclass-1.0.1.jar')
+    compile files('libs/dropbox-android-sdk-1.6.3.jar')
+    compile files('libs/javax.servlet-api-3.1.0.jar')
+    compile files('libs/jetty-all-8.1.9.v20130131.jar')
+    compile files('libs/json_simple-1.1.jar')
+    compile files('libs/jsr305-3.0.1.jar')
+    compile project(path: ':cnnlibs')
+    compile 'com.android.support:support-v4:23.0.0'
+    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support.test:runner:0.5'
+    compile 'com.android.support.constraint:constraint-layout:1.0.1'
+}

@@ -1,0 +1,36 @@
+{
+    "logs": [
+        {
+            "outputFile": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\res\\merged\\androidTest\\debug\\values\\values.xml",
+            "map": [
+                {
+                    "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "from": {
+                        "startLines": "2,9,16,23,30,31,32,81,82,83,84,85,112,113,114",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,270,481,640,801,849,969,3224,3343,3450,3807,4162,5496,5735,5810",
+                        "endLines": "8,15,22,29,30,31,80,81,82,83,84,111,112,113,114",
+                        "endColumns": "17,17,18,17,47,119,13,118,106,356,354,17,238,74,94",
+                        "endOffsets": "265,476,635,796,844,964,3219,3338,3445,3802,4157,5491,5730,5805,5900"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values\\values.xml",
+            "map": [
+                {
+                    "source": "D:\\git\\MccObjectDetection\\uMLogger\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "from": {
+                        "startLines": "2,9,16,23,30,31,32,81,82,83,84,85,112,113,114",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,270,481,640,801,849,969,3224,3343,3450,3807,4162,5496,5735,5810",
+                        "endLines": "8,15,22,29,30,31,80,81,82,83,84,111,112,113,114",
+                        "endColumns": "17,17,18,17,47,119,13,118,106,356,354,17,238,74,94",
+                        "endOffsets": "265,476,635,796,844,964,3219,3338,3445,3802,4157,5491,5730,5805,5900"
+                    }
+                }
+            ]
+        }
+    ]
+}

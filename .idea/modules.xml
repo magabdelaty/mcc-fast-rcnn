@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/MccObjectDetection.iml" filepath="$PROJECT_DIR$/MccObjectDetection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cnnlibs/cnnlibs.iml" filepath="$PROJECT_DIR$/cnnlibs/cnnlibs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dropboxChooserSDK/dropboxChooserSDK.iml" filepath="$PROJECT_DIR$/dropboxChooserSDK/dropboxChooserSDK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/openCVLibrary300/openCVLibrary300.iml" filepath="$PROJECT_DIR$/openCVLibrary300/openCVLibrary300.iml" />
+      <module fileurl="file://$PROJECT_DIR$/uMLogger/uMLogger.iml" filepath="$PROJECT_DIR$/uMLogger/uMLogger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/volley/volley.iml" filepath="$PROJECT_DIR$/volley/volley.iml" />
+    </modules>
+  </component>
+</project>

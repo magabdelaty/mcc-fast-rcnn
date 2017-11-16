@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="https://android.dropbox.com/StringsSchema">
+    <color name="actionBarBackground">#007de3</color>
+    <color name="actionBarHighlight">#000000</color>
+    <color name="actionModeBackground">#FFFFFFFF</color>
+    <color name="actionModeHighlight">#FF000000</color>
+    <color name="album_list_cover_image_frame">#FF000000</color>
+    <color name="barDark">#444</color>
+    <color name="barDarkBorder">#666</color>
+    <color name="barLight">#dcdcdc</color>
+    <color name="barLightBorder">#c1c1c1</color>
+    <color name="blackBackground">#000000</color>
+    <color name="blue">#FF0000FF</color>
+    <color name="blueBackground">#1865a9</color>
+    <color name="buttonHighlight">#ffa443</color>
+    <color name="darkBlueText">#2B405C</color>
+    <color name="darkButtonText">#FFFFFF</color>
+    <color name="darkGrayText">#323436</color>
+    <color name="dialogBoxTitleBackground">#DD000000</color>
+    <color name="errorText">#bb0000</color>
+    <color name="feature_popover_bg">#EAF3FF</color>
+    <color name="feature_popover_border">#000000</color>
+    <color name="fileListMediumGrayText">#666666</color>
+    <color name="filelistBackground">#ffffff</color>
+    <color name="filelistItemFocused">#d3e7fa</color>
+    <color name="filelistItemPressed">#f4faff</color>
+    <color name="folderTitleBackground">#e6e7e8</color>
+    <color name="folderTitleBackgroundBorder">#a9a9a9</color>
+    <color ns1:default="#000000" ns1:samsung="#ff2b2b2b" name="galleryChromeBackground">#000000</color>
+    <color ns1:default="#cc000000" ns1:samsung="#ff000000" name="galleryChromeTransparencyBackgroundDark">#cc000000</color>
+    <color ns1:default="#99000000" ns1:samsung="#ff0d0d0d" name="galleryChromeTransparencyBackgroundLight">#99000000</color>
+    <color ns1:default="#55007ee5" ns1:samsung="#00000000" name="galleryItemSelectedOverlay">#55007ee5</color>
+    <color name="grayBlueishText">#768195</color>
+    <color name="grayButtonText">#111</color>
+    <color name="green">#FF00FF00</color>
+    <color name="greenButtonText">#FFFFFF</color>
+    <color name="lightBlueBackground">#F4FAFF</color>
+    <color name="lightBlueBackground2">#f2f8fc</color>
+    <color name="listEmptyText">#666</color>
+    <color name="localFilelistBackground">#000000</color>
+    <color name="localListEmptyText">#999999</color>
+    <color name="loginButtonText">#FF000000</color>
+    <color name="loginText">#FFFFFF</color>
+    <color name="mediumGrayText">#738499</color>
+    <color name="passcodeBackgroundOverride">#ff454545</color>
+    <color name="passwordStrength1">#ad1a11</color>
+    <color name="passwordStrength2">#ecab1a</color>
+    <color name="passwordStrength3">#adc061</color>
+    <color name="passwordStrength4">#68b321</color>
+    <color name="passwordStrengthMeterLit">#ff00ff</color>
+    <color name="passwordStrengthMeterUnlit">#e7e7e7</color>
+    <color name="passwordStrengthText">#58C473</color>
+    <color name="passwordStrengthUnlitPhone">#e7e7e7</color>
+    <color name="photoTabBackground">#ffffff</color>
+    <color name="red">#FFFF0000</color>
+    <color name="redButtonText">#FFFFFF</color>
+    <color name="ssLoginText">#354045</color>
+    <color name="ss_passwordStrengthMeterLit">#96a5b2</color>
+    <color name="ss_passwordStrengthMeterUnlit">#ffffff</color>
+    <color name="ss_passwordStrengthText">#96a5b2</color>
+    <color name="statusBarSeparator">#333333</color>
+    <color name="text">#FF000000</color>
+    <color name="textFieldStroke">#359cf8</color>
+    <color name="textHighlight">#1865a9</color>
+    <color name="titleBarText">#333333</color>
+    <color name="titleBarTextWhite">#FFFFFF</color>
+    <color name="tourBoxText">#000000</color>
+    <color name="tourGrayBorder">#999999</color>
+    <color name="tourText">#718297</color>
+    <color name="tourTitleText">#2a405c</color>
+    <color ns1:default="#E6000000" ns1:samsung="#FF000000" name="translucentBlackBackground">#E6000000</color>
+    <color name="translucentFileListMediumGrayText">#E6666666</color>
+    <color ns1:default="#E6FFFFFF" ns1:samsung="#FFFFFFFF" name="translucentWhiteBackground">#E6FFFFFF</color>
+    <color name="translucentWhiteText">#E6FFFFFF</color>
+    <color ns1:default="#AA000000" ns1:samsung="#ff000000" name="videoIconDetailsBackground">#AA000000</color>
+    <color name="whiteBackground">#FFFFFF</color>
+    <color name="whiteText">#ffffff</color>
+    <dimen name="appStoreInterstitialMargin">25dp</dimen>
+    <dimen name="buttonTextSize">15sp</dimen>
+    <dimen name="dbx_action_bar_default_height">48dip</dimen>
+    <dimen name="dbx_action_bar_icon_vertical_padding">8dip</dimen>
+    <dimen name="dbx_action_bar_subtitle_bottom_margin">5dip</dimen>
+    <dimen name="dbx_action_bar_subtitle_text_size">14dp</dimen>
+    <dimen name="dbx_action_bar_subtitle_top_margin">-3dp</dimen>
+    <dimen name="dbx_action_bar_title_text_size">18dp</dimen>
+    <dimen name="dbx_action_button_min_width">56dip</dimen>
+    <dimen name="dbx_dropdownitem_icon_width">32dip</dimen>
+    <dimen name="dbx_dropdownitem_text_padding_left">8dip</dimen>
+    <dimen name="dbx_dropdownitem_text_padding_right">8dip</dimen>
+    <dimen name="dbx_search_view_preferred_width">320dip</dimen>
+    <dimen name="dbx_search_view_text_min_width">160dip</dimen>
+    <dimen name="fileChooserButtonLeft">2dp</dimen>
+    <dimen name="fileChooserButtonRight">2dp</dimen>
+    <dimen name="fileChooserButtonsPadding">4dp</dimen>
+    <dimen name="fileChooserPaddingBottom">8dp</dimen>
+    <dimen name="fileChooserPaddingLeft">8dp</dimen>
+    <dimen name="fileChooserPaddingRight">8dp</dimen>
+    <dimen name="fileChooserPaddingTop">12dp</dimen>
+    <dimen name="fileChooserTitleText">20sp</dimen>
+    <integer name="dbx_max_action_buttons">2</integer>
+    <string name="dbx_install">Install Dropbox</string>
+    <string name="dbx_install_button_cancel">Cancel</string>
+    <string name="dbx_install_button_ok">Install</string>
+    <string name="dbx_install_main">Please Install the Dropbox App</string>
+    <string name="dbx_install_sub">With Dropbox installed, you can access all your stuff in your favorite apps, like this one!</string>
+    <string name="dbx_update">Update Dropbox</string>
+    <string name="dbx_update_button_ok">Update</string>
+    <string name="dbx_update_main">Please Update the Dropbox App</string>
+    <string name="dbx_update_sub">With the new Dropbox app, you can access all your stuff in your favorite apps, like this one!</string>
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    <style name="BottomBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/common_bar_light_gray_bottom</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="BottomBarContainer">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="CommonButtonGreen" parent="_CommonButtonBase">
+        <item name="android:background">@drawable/common_button_green</item>
+        <item name="android:textColor">@color/greenButtonText</item>
+    </style>
+    <style name="CommonButtonLightGray" parent="_CommonButtonBase">
+        <item name="android:background">@drawable/common_button_light_gray</item>
+        <item name="android:textColor">@color/grayButtonText</item>
+    </style>
+    <style name="_CommonButtonBase">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/buttonTextSize</item>
+    </style>
+</resources>

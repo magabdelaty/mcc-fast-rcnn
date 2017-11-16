@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4\\tab_dropbox.png",
+        "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-mdpi-v4\\tab_dropbox.png"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4\\ic_launcher.png",
+        "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-mdpi-v4\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-mdpi-v4\\icon_new.png",
+        "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-mdpi-v4\\icon_new.png"
+    }
+]

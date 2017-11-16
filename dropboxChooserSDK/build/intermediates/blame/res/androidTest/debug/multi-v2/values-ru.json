@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\values-ru\\values-ru.xml",
+            "map": [
+                {
+                    "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\values-ru\\values-ru.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,114,175,236,323,479,535,593,677",
+                        "endColumns": "58,60,60,86,155,55,57,83,153",
+                        "endOffsets": "109,170,231,318,474,530,588,672,826"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-ru\\values-ru.xml",
+            "map": [
+                {
+                    "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\values-ru\\values-ru.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,114,175,236,323,479,535,593,677",
+                        "endColumns": "58,60,60,86,155,55,57,83,153",
+                        "endOffsets": "109,170,231,318,474,530,588,672,826"
+                    }
+                }
+            ]
+        }
+    ]
+}

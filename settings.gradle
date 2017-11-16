@@ -1,0 +1,6 @@
+include ':dropboxChooserSDK'
+include ':cnnlibs'
+include ':openCVLibrary300'
+include ':uMLogger'
+include ':volley'
+include ':app'

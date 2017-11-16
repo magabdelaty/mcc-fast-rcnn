@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- pressed comes before focused to take precedence -->
+    <item android:drawable="@drawable/common_btn_light_gray_pressed" android:state_pressed="true" />
+    <item android:drawable="@drawable/common_btn_light_gray_focused" android:state_focused="true" />
+    <item android:drawable="@drawable/common_btn_light_gray_disabled" android:state_enabled="false" />
+    <item android:drawable="@drawable/common_btn_light_gray_normal" />
+</selector>

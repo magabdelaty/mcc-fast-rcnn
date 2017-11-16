@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\bottom_buttons_light.xml",
+        "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\bottom_buttons_light.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\app_store_interstitial.xml",
+        "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\app_store_interstitial.xml"
+    },
+    {
+        "merged": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\bottom_bar_light.xml",
+        "source": "D:\\git\\MccObjectDetection\\dropboxChooserSDK\\build\\intermediates\\bundles\\debug\\res\\layout\\bottom_bar_light.xml"
+    }
+]
