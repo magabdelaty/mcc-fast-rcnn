@@ -15,7 +15,6 @@
     <string name="btn_select_dropbox_image_txt">DropBox Image</string>
     <string name="btn_login_DropBox_txt">Login to DropBox</string>
     <string name="serverURL">http://13.64.153.243:8080/</string>
-    <!-- 192.168.9.102:8080/195.43.9.31:80  -->
     <string name="costPerGB">2.5</string>
     <string name="cloudProviderUUID">16eba865-ce69-4ef4-82a6-8ac0c883ffd6</string>
     <string name="app_dir">simplicity</string>
@@ -53,8 +52,8 @@
     <string name="ticker_text">The Simplicity framework is running</string>
     <string name="notification_title_text">The Simplicity framework</string>
     <string name="notification_content_text">The Simplicity framework is running</string>
-    <string name="DropBox_APP_KEY">4zmiail6z7kdppi</string>
-    <string name="DropBox_APP_SECRET">aicu2iu6e76xhwb</string>
+    <string name="DropBox_APP_KEY">4zmixaidbfbl6z7kdppi</string>
+    <string name="DropBox_APP_SECRET">aicu2iu6exxnxnbvnnx76xhwb</string>
     <string name="title_activity_service_provider">Service Provider</string>
     <string name="btn_start_service_activity_txt">Start Service Provider Mode</string>
     <string name="title_activity_add_provider">Add Service Provider</string>
