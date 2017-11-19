@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:dbx="https://android.dropbox.com/StringsSchema">
+<?xml version="1.0" encoding="utf-8"?><resources xmlns:dbx="https://android.dropbox.com/StringsSchema">
     <string name="dbx_install_main">Veuillez installer l\'application Dropbox</string>
     <string name="dbx_install_sub">Après avoir installé Dropbox, vous pouvez accéder à tous vos fichiers dans vos applications préférées, comme celui-ci !</string>
     <string name="dbx_install">Installation de Dropbox</string>

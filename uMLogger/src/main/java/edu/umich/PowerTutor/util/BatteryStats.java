@@ -22,184 +22,193 @@ package edu.umich.PowerTutor.util;
 import java.io.File;
 
 public class BatteryStats {
-    private static final String TAG = "BatteryStats";
-    private static final String[] VOLTAGE_FILES = {
-            "/sys/class/power_supply/battery/voltage_now",
-            "/sys/class/power_supply/battery/batt_vol",
-    };
-    private static final double[] VOLTAGE_CONV = {
-            1e-6, // Source in microvolts.
-            1e-3, // Source in millivolts.
-    };
-    private static final String[] CURRENT_FILES = {
-            "/sys/class/power_supply/battery/current_now",
-            //"/sys/class/power_supply/battery/batt_current", Doesn't seem good
-    };
-    private static final double[] CURRENT_CONV = {
-            1e-6, // Source in microamps.
-            //1e-3, // Source in milliamps.
-    };
-    private static final String[] TEMP_FILES = {
-            "/sys/class/power_supply/battery/temp",
-            "/sys/class/power_supply/battery/batt_temp",
-    };
-    private static final double[] TEMP_CONV = {
-            1e-1, // Source in tenths of a centigrade.
-            1e-1, // Source in tenths of a centigrade.
-    };
-    private static final String[] CHARGE_FILES = {
-            "/sys/class/power_supply/battery/charge_counter",
-    };
-    private static final double[] CHARGE_CONV = {
-            60 * 60 * 1e-6, // Source in micro amp hours.
-    };
-    private static final String[] CAPACITY_FILES = {
-            "/sys/class/power_supply/battery/capacity",
-    };
-    private static final double[] CAPACITY_CONV = {
-            1e-2, // Source in percentage.
-    };
-    private static final String[] FULL_CAPACITY_FILES = {
-            "/sys/class/power_supply/battery/full_bat",
-    };
-    private static final double[] FULL_CAPACITY_CONV = {
-            60 * 60 * 1e-6, // Source in micro amp hours.
-    };
-    private static BatteryStats instance = null;
-    SystemInfo sysInfo;
-    String voltageFile;
-    String currentFile;
-    String tempFile;
-    String chargeFile;
-    String capacityFile;
-    String fullCapacityFile;
-    double voltageConv;
-    double currentConv;
-    double tempConv;
-    double chargeConv;
-    double capacityConv;
-    double fullCapacityConv;
+  private static final String TAG = "BatteryStats";
+  private static BatteryStats instance = null;
 
-    private BatteryStats() {
-        sysInfo = SystemInfo.getInstance();
+  public static BatteryStats getInstance() {
+    if(instance == null) {
+      instance = new BatteryStats();
+    }
+    return instance;
+  }
 
-        // Get voltage information.
-        for (int i = 0; i < VOLTAGE_FILES.length; i++) {
-            if (new File(VOLTAGE_FILES[i]).exists()) {
-                voltageFile = VOLTAGE_FILES[i];
-                voltageConv = VOLTAGE_CONV[i];
-            }
-        }
+  private static final String[] VOLTAGE_FILES = {
+    "/sys/class/power_supply/battery/voltage_now",
+    "/sys/class/power_supply/battery/batt_vol",
+  };
+  private static final double[] VOLTAGE_CONV = {
+    1e-6, // Source in microvolts.
+    1e-3, // Source in millivolts.
+  };
 
-        // Get current information.
-        for (int i = 0; i < CURRENT_FILES.length; i++) {
-            if (new File(CURRENT_FILES[i]).exists()) {
-                currentFile = CURRENT_FILES[i];
-                currentConv = CURRENT_CONV[i];
-            }
-        }
+  private static final String[] CURRENT_FILES = {
+    "/sys/class/power_supply/battery/current_now",
+    //"/sys/class/power_supply/battery/batt_current", Doesn't seem good
+  };
+  private static final double[] CURRENT_CONV = {
+    1e-6, // Source in microamps.
+    //1e-3, // Source in milliamps.
+  };
 
-        // Get temperature information.
-        for (int i = 0; i < TEMP_FILES.length; i++) {
-            if (new File(TEMP_FILES[i]).exists()) {
-                tempFile = TEMP_FILES[i];
-                tempConv = TEMP_CONV[i];
-            }
-        }
+  private static final String[] TEMP_FILES = {
+    "/sys/class/power_supply/battery/temp",
+    "/sys/class/power_supply/battery/batt_temp",
+  };
+  private static final double[] TEMP_CONV = {
+    1e-1, // Source in tenths of a centigrade.
+    1e-1, // Source in tenths of a centigrade.
+  };
 
-        // Get charge information.
-        for (int i = 0; i < CHARGE_FILES.length; i++) {
-            if (new File(CHARGE_FILES[i]).exists()) {
-                chargeFile = CHARGE_FILES[i];
-                chargeConv = CHARGE_CONV[i];
-            }
-        }
+  private static final String[] CHARGE_FILES = {
+    "/sys/class/power_supply/battery/charge_counter",
+  };
+  private static final double[] CHARGE_CONV = {
+    60*60*1e-6, // Source in micro amp hours.
+  };
 
-        // Get capacity information.
-        for (int i = 0; i < CAPACITY_FILES.length; i++) {
-            if (new File(CAPACITY_FILES[i]).exists()) {
-                capacityFile = CAPACITY_FILES[i];
-                capacityConv = CAPACITY_CONV[i];
-            }
-        }
+  private static final String[] CAPACITY_FILES = {
+    "/sys/class/power_supply/battery/capacity",
+  };
+  private static final double[] CAPACITY_CONV = {
+    1e-2, // Source in percentage.
+  };
 
-        // Get full capacity information.
-        for (int i = 0; i < FULL_CAPACITY_FILES.length; i++) {
-            if (new File(FULL_CAPACITY_FILES[i]).exists()) {
-                fullCapacityFile = FULL_CAPACITY_FILES[i];
-                fullCapacityConv = FULL_CAPACITY_CONV[i];
-            }
-        }
+  private static final String[] FULL_CAPACITY_FILES = {
+    "/sys/class/power_supply/battery/full_bat",
+  };
+  private static final double[] FULL_CAPACITY_CONV = {
+    60*60*1e-6, // Source in micro amp hours.
+  };
+
+  SystemInfo sysInfo;
+
+  String voltageFile;
+  String currentFile;
+  String tempFile;
+  String chargeFile;
+  String capacityFile;
+  String fullCapacityFile;
+
+  double voltageConv;
+  double currentConv;
+  double tempConv;
+  double chargeConv;
+  double capacityConv;
+  double fullCapacityConv;
+
+  private BatteryStats() {
+    sysInfo = SystemInfo.getInstance();
+
+    // Get voltage information.
+    for(int i = 0; i < VOLTAGE_FILES.length; i++) {
+      if(new File(VOLTAGE_FILES[i]).exists()) {
+        voltageFile = VOLTAGE_FILES[i];
+        voltageConv = VOLTAGE_CONV[i];
+      }
     }
 
-    public static BatteryStats getInstance() {
-        if (instance == null) {
-            instance = new BatteryStats();
-        }
-        return instance;
+    // Get current information.
+    for(int i = 0; i < CURRENT_FILES.length; i++) {
+      if(new File(CURRENT_FILES[i]).exists()) {
+        currentFile = CURRENT_FILES[i];
+        currentConv = CURRENT_CONV[i];
+      }
     }
 
-    public boolean hasVoltage() {
-        return voltageFile != null;
+    // Get temperature information.
+    for(int i = 0; i < TEMP_FILES.length; i++) {
+      if(new File(TEMP_FILES[i]).exists()) {
+        tempFile = TEMP_FILES[i];
+        tempConv = TEMP_CONV[i];
+      }
     }
 
-    public double getVoltage() {
-        if (voltageFile == null) return -1.0;
-        long volt = sysInfo.readLongFromFile(voltageFile);
-        return volt == -1 ? -1.0 : voltageConv * volt;
+    // Get charge information.
+    for(int i = 0; i < CHARGE_FILES.length; i++) {
+      if(new File(CHARGE_FILES[i]).exists()) {
+        chargeFile = CHARGE_FILES[i];
+        chargeConv = CHARGE_CONV[i];
+      }
     }
 
-    public boolean hasCurrent() {
-        return currentFile != null;
+    // Get capacity information.
+    for(int i = 0; i < CAPACITY_FILES.length; i++) {
+      if(new File(CAPACITY_FILES[i]).exists()) {
+        capacityFile = CAPACITY_FILES[i];
+        capacityConv = CAPACITY_CONV[i];
+      }
     }
 
-    public double getCurrent() {
-        long curr = sysInfo.readLongFromFile(currentFile);
-        return curr == -1 ? -1.0 : currentConv * curr;
+    // Get full capacity information.
+    for(int i = 0; i < FULL_CAPACITY_FILES.length; i++) {
+      if(new File(FULL_CAPACITY_FILES[i]).exists()) {
+        fullCapacityFile = FULL_CAPACITY_FILES[i];
+        fullCapacityConv = FULL_CAPACITY_CONV[i];
+      }
     }
+  }
 
-    public boolean hasTemp() {
-        return tempFile != null;
-    }
+  public boolean hasVoltage() {
+    return voltageFile != null;
+  }
 
-    public double getTemp() {
-        if (tempFile == null) return -1.0;
-        long temp = sysInfo.readLongFromFile(tempFile);
-        return temp == -1 ? -1.0 : tempConv * temp;
-    }
+  public double getVoltage() {
+    if(voltageFile == null) return -1.0;
+    long volt = sysInfo.readLongFromFile(voltageFile);
+    return volt == -1 ? -1.0 : voltageConv * volt;
+  }
 
-    public boolean hasCharge() {
-        return chargeFile != null ||
-                hasFullCapacity() && hasCapacity();
-    }
+  public boolean hasCurrent() {
+    return currentFile != null;
+  }
 
-    public double getCharge() {
-        if (chargeFile == null) {
-            double r1 = getCapacity();
-            double r2 = getFullCapacity();
-            return r1 < 0 || r2 < 0 ? -1.0 : r1 * r2;
-        }
-        long charge = sysInfo.readLongFromFile(chargeFile);
-        return charge == -1 ? -1.0 : chargeConv * charge;
-    }
+  public double getCurrent() {
+    long curr = sysInfo.readLongFromFile(currentFile);
+    return curr == -1 ? -1.0 : currentConv * curr;
+  }
 
-    public boolean hasCapacity() {
-        return capacityFile != null;
-    }
+  public boolean hasTemp() {
+    return tempFile != null;
+  }
 
-    public double getCapacity() {
-        if (capacityFile == null) return -1.0;
-        long cap = sysInfo.readLongFromFile(capacityFile);
-        return cap == -1 ? -1.0 : capacityConv * cap;
-    }
+  public double getTemp() {
+    if(tempFile == null) return -1.0;
+    long temp = sysInfo.readLongFromFile(tempFile);
+    return temp == -1 ? -1.0 : tempConv * temp;
+  }
 
-    public boolean hasFullCapacity() {
-        return fullCapacityFile != null;
-    }
+  public boolean hasCharge() {
+    return chargeFile != null ||
+           hasFullCapacity() && hasCapacity();
+  }
 
-    public double getFullCapacity() {
-        if (fullCapacityFile == null) return -1.0;
-        long cap = sysInfo.readLongFromFile(fullCapacityFile);
-        return cap == -1 ? -1.0 : fullCapacityConv * cap;
+  public double getCharge() {
+    if(chargeFile == null) {
+      double r1 = getCapacity();
+      double r2 = getFullCapacity();
+      return r1 < 0 || r2 < 0 ? -1.0 : r1 * r2;
     }
+    long charge = sysInfo.readLongFromFile(chargeFile);
+    return charge == -1 ? -1.0 : chargeConv * charge;
+  }
+
+  public boolean hasCapacity() {
+    return capacityFile != null;
+  }
+
+  public double getCapacity() {
+    if(capacityFile == null) return -1.0;
+    long cap = sysInfo.readLongFromFile(capacityFile);
+    return cap == -1 ? -1.0 : capacityConv * cap;
+  }
+
+  public boolean hasFullCapacity() {
+    return fullCapacityFile != null;
+  }
+
+  public double getFullCapacity() {
+    if(fullCapacityFile == null) return -1.0;
+    long cap = sysInfo.readLongFromFile(fullCapacityFile);
+    return cap == -1 ? -1.0 : fullCapacityConv * cap;
+  }
 }

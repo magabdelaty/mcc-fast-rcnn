@@ -24,8 +24,7 @@ import com.android.volley.VolleyError;
  */
 @SuppressWarnings("serial")
 public class ParseError extends VolleyError {
-    public ParseError() {
-    }
+    public ParseError() { }
 
     public ParseError(NetworkResponse networkResponse) {
         super(networkResponse);

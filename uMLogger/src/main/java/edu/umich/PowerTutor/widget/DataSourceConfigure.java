@@ -38,97 +38,97 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class DataSourceConfigure extends Activity {
-    private DataSource dataSource;
-    private int level;
+  private DataSource dataSource;
+  private int level;
 
-    private String[] shortOptions;
-    private String[] longOptions;
+  private String[] shortOptions;
+  private String[] longOptions;
 
-    @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
-        setResult(RESULT_CANCELED);
+  @Override
+  public void onCreate(Bundle icicle) {
+    super.onCreate(icicle);
+    setResult(RESULT_CANCELED);
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            dataSource = (DataSource) extras.getSerializable("data_source");
-            level = extras.getInt("level");
-        }
-        if (dataSource == null) {
-            dataSource = new DataSource();
-            level = 0;
-        }
-        setTitle(dataSource.getTitle(level));
-        shortOptions = dataSource.getShortOptions(level);
-        longOptions = dataSource.getLongOptions(level);
+    Intent intent = getIntent();
+    Bundle extras = intent.getExtras();
+    if(extras != null) {
+      dataSource = (DataSource)extras.getSerializable("data_source");
+      level = extras.getInt("level");
+    }
+    if(dataSource == null) {
+      dataSource = new DataSource();
+      level = 0;
+    }
+    setTitle(dataSource.getTitle(level));
+    shortOptions = dataSource.getShortOptions(level);
+    longOptions = dataSource.getLongOptions(level);
 
-        final ListView listView = new ListView(this);
-        ArrayAdapter adapter = new ArrayAdapter(this, 0) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View itemView = getLayoutInflater()
-                        .inflate(R.layout.widget_item_layout, listView, false);
-                TextView title = (TextView) itemView.findViewById(R.id.title);
-                TextView summary = (TextView) itemView.findViewById(R.id.summary);
-                Item item = (Item) getItem(position);
-                item.setupView(title, summary);
-                return itemView;
-            }
-        };
+    final ListView listView = new ListView(this);
+    ArrayAdapter adapter = new ArrayAdapter(this, 0) {
+      public View getView(int position, View convertView, ViewGroup parent) {
+        View itemView = getLayoutInflater()
+            .inflate(R.layout.widget_item_layout, listView, false);
+        TextView title = (TextView)itemView.findViewById(R.id.title);
+        TextView summary = (TextView)itemView.findViewById(R.id.summary);
+        Item item = (Item)getItem(position);
+        item.setupView(title, summary);
+        return itemView;
+      }
+    };
 
-        int pos = 0;
-        final Item[] items = new Item[shortOptions.length];
-        for (int i = 0; i < shortOptions.length; i++) {
-            if (dataSource.hasOption(level, i)) {
-                items[pos] = new Item(i);
-                adapter.add(items[pos++]);
-            }
-        }
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView parent, View view,
-                                    int position, long id) {
-                items[position].onClick();
-            }
-        });
-        setContentView(listView);
+    int pos = 0;
+    final Item[] items = new Item[shortOptions.length];
+    for(int i = 0; i < shortOptions.length; i++) {
+      if(dataSource.hasOption(level, i)) {
+        items[pos] = new Item(i);
+        adapter.add(items[pos++]);
+      }
+    }
+    listView.setAdapter(adapter);
+    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      public void onItemClick(AdapterView parent, View view,
+                              int position, long id) {
+        items[position].onClick();
+      }
+    });
+    setContentView(listView);
+  }
+
+  @Override
+  protected void onActivityResult(int reqCode, int resCode, Intent data) {
+    if(resCode == RESULT_OK) {
+      Intent resultValue = new Intent();
+      resultValue.putExtras(data);
+      setResult(RESULT_OK, resultValue);
+      finish();
+    }
+  }
+
+  private class Item {
+    private int id;
+
+    public Item(int id) {
+      this.id = id;
+    }
+  
+    public void setupView(TextView title, TextView summary) {
+      title.setText(shortOptions[id]);
+      summary.setText(longOptions[id]);
     }
 
-    @Override
-    protected void onActivityResult(int reqCode, int resCode, Intent data) {
-        if (resCode == RESULT_OK) {
-            Intent resultValue = new Intent();
-            resultValue.putExtras(data);
-            setResult(RESULT_OK, resultValue);
-            finish();
-        }
+    public void onClick() {
+      if(dataSource.setParam(level, id)) {
+        Intent resultValue = new Intent();
+        resultValue.putExtra("data_source", dataSource);
+        setResult(RESULT_OK, resultValue);
+        finish();
+      } else {
+        Intent startIntent = new Intent(DataSourceConfigure.this,
+                                        DataSourceConfigure.class);
+        startIntent.putExtra("data_source", dataSource);
+        startIntent.putExtra("level", level + 1);
+        startActivityForResult(startIntent, 0);
+      }
     }
-
-    private class Item {
-        private int id;
-
-        public Item(int id) {
-            this.id = id;
-        }
-
-        public void setupView(TextView title, TextView summary) {
-            title.setText(shortOptions[id]);
-            summary.setText(longOptions[id]);
-        }
-
-        public void onClick() {
-            if (dataSource.setParam(level, id)) {
-                Intent resultValue = new Intent();
-                resultValue.putExtra("data_source", dataSource);
-                setResult(RESULT_OK, resultValue);
-                finish();
-            } else {
-                Intent startIntent = new Intent(DataSourceConfigure.this,
-                        DataSourceConfigure.class);
-                startIntent.putExtra("data_source", dataSource);
-                startIntent.putExtra("level", level + 1);
-                startActivityForResult(startIntent, 0);
-            }
-        }
-    }
+  }
 }

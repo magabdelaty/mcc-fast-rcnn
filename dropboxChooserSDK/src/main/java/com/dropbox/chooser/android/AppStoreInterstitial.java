@@ -27,10 +27,6 @@ import com.dropbox.chooser.android.R;
 class AppStoreInterstitial {
     public static final String DIALOG_TAG = "com.dropbox.chooser.android.DIALOG";
     private static final String DROPBOX_PACKAGE_NAME = "com.dropbox.android";
-    private static final int MAX_DIALOG_WIDTH_DP = 590;
-    private static final int MAX_DIALOG_HEIGHT_DP = 700;
-    private static final int DLG_PADDING_DP = 10;
-    private static final int APPROX_STATUSBAR_HEIGHT_DP = 25; // TODO: be better to have the right one and know if it's on top or bottom
 
     @SuppressLint("NewApi") // lint isn't clever enough to figure out that we branched manually :(
     public static void showInterstitial(ActivityLike thing) {
@@ -43,67 +39,6 @@ class AppStoreInterstitial {
             FragmentManager fm = thing.getFragmentManager();
             frag.show(fm, DIALOG_TAG);
         }
-    }
-
-    private static void centerWindow(Window w) {
-        DisplayMetrics metrics = new DisplayMetrics();
-        Display display = w.getWindowManager().getDefaultDisplay();
-        display.getMetrics(metrics);
-
-        int width = Math.min(metrics.widthPixels - (int) (2 * DLG_PADDING_DP * metrics.density),
-                (int) (MAX_DIALOG_WIDTH_DP * metrics.density));
-        int height = Math.min(metrics.heightPixels - (int) ((2 * DLG_PADDING_DP + APPROX_STATUSBAR_HEIGHT_DP) * metrics.density),
-                (int) (MAX_DIALOG_HEIGHT_DP * metrics.density));
-
-        int x = (metrics.widthPixels - width) / 2;
-        int y = (metrics.heightPixels - height - ((int) (APPROX_STATUSBAR_HEIGHT_DP * metrics.density))) / 2;
-
-        LayoutParams params = w.getAttributes();
-        params.x = x;
-        params.y = y;
-        params.width = width;
-        params.height = height;
-        w.setAttributes(params);
-        w.setGravity(Gravity.LEFT | Gravity.TOP);
-    }
-
-    private static void setStrings(View v, boolean needUpdate) {
-        TextView title = (TextView) v.findViewById(R.id.dbx_install_title);
-        TextView main = (TextView) v.findViewById(R.id.dbx_install_main);
-        TextView sub = (TextView) v.findViewById(R.id.dbx_install_sub);
-        Button okButton = (Button) v.findViewById(R.id.dbx_bottom_bar_ok_button);
-        Button cancelButton = (Button) v.findViewById(R.id.dbx_bottom_bar_cancel_button);
-
-        if (needUpdate) {
-            title.setText(R.string.dbx_update);
-            main.setText(R.string.dbx_update_main);
-            sub.setText(R.string.dbx_update_sub);
-            okButton.setText(R.string.dbx_update_button_ok);
-        } else {
-            // first-time install
-            title.setText(R.string.dbx_install);
-            main.setText(R.string.dbx_install_main);
-            sub.setText(R.string.dbx_install_sub);
-            okButton.setText(R.string.dbx_install_button_ok);
-        }
-        cancelButton.setText(R.string.dbx_install_button_cancel);
-    }
-
-    private static boolean isDropboxInstalled(Activity act) {
-        PackageManager pm = act.getPackageManager();
-        try {
-            pm.getPackageInfo(DROPBOX_PACKAGE_NAME, PackageManager.GET_ACTIVITIES);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
-    }
-
-    private static void launchMarket(Activity act) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        // Market page for the official Dropbox App.
-        intent.setData(Uri.parse("market://details?id=" + DROPBOX_PACKAGE_NAME));
-        act.startActivity(intent);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -183,5 +118,72 @@ class AppStoreInterstitial {
             super.onStart();
             centerWindow(getDialog().getWindow());
         }
+    }
+
+    private static final int MAX_DIALOG_WIDTH_DP = 590;
+    private static final int MAX_DIALOG_HEIGHT_DP = 700;
+
+    private static final int DLG_PADDING_DP = 10;
+    private static final int APPROX_STATUSBAR_HEIGHT_DP = 25; // TODO: be better to have the right one and know if it's on top or bottom
+
+    private static void centerWindow(Window w) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        Display display = w.getWindowManager().getDefaultDisplay();
+        display.getMetrics(metrics);
+
+        int width = Math.min(metrics.widthPixels - (int)(2 * DLG_PADDING_DP * metrics.density),
+                             (int)(MAX_DIALOG_WIDTH_DP * metrics.density));
+        int height = Math.min(metrics.heightPixels - (int)((2 * DLG_PADDING_DP + APPROX_STATUSBAR_HEIGHT_DP) * metrics.density),
+                              (int)(MAX_DIALOG_HEIGHT_DP * metrics.density));
+
+        int x = (metrics.widthPixels - width) / 2;
+        int y = (metrics.heightPixels - height - ((int) (APPROX_STATUSBAR_HEIGHT_DP * metrics.density))) / 2;
+
+        LayoutParams params = w.getAttributes();
+        params.x = x;
+        params.y = y;
+        params.width = width;
+        params.height = height;
+        w.setAttributes(params);
+        w.setGravity(Gravity.LEFT|Gravity.TOP);
+    }
+
+    private static void setStrings(View v, boolean needUpdate) {
+        TextView title = (TextView) v.findViewById(R.id.dbx_install_title);
+        TextView main = (TextView) v.findViewById(R.id.dbx_install_main);
+        TextView sub = (TextView) v.findViewById(R.id.dbx_install_sub);
+        Button okButton = (Button) v.findViewById(R.id.dbx_bottom_bar_ok_button);
+        Button cancelButton = (Button) v.findViewById(R.id.dbx_bottom_bar_cancel_button);
+
+        if (needUpdate) {
+            title.setText(R.string.dbx_update);
+            main.setText(R.string.dbx_update_main);
+            sub.setText(R.string.dbx_update_sub);
+            okButton.setText(R.string.dbx_update_button_ok);
+        } else {
+            // first-time install
+            title.setText(R.string.dbx_install);
+            main.setText(R.string.dbx_install_main);
+            sub.setText(R.string.dbx_install_sub);
+            okButton.setText(R.string.dbx_install_button_ok);
+        }
+        cancelButton.setText(R.string.dbx_install_button_cancel);
+    }
+
+    private static boolean isDropboxInstalled(Activity act) {
+        PackageManager pm = act.getPackageManager();
+        try {
+            pm.getPackageInfo(DROPBOX_PACKAGE_NAME, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    private static void launchMarket(Activity act) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        // Market page for the official Dropbox App.
+        intent.setData(Uri.parse("market://details?id=" + DROPBOX_PACKAGE_NAME));
+        act.startActivity(intent);
     }
 }

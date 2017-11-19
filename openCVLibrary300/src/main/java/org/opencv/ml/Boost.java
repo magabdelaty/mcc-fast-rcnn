@@ -5,9 +5,13 @@
 package org.opencv.ml;
 
 
+
 // C++: class Boost
 //javadoc: Boost
 public class Boost extends DTrees {
+
+    protected Boost(long addr) { super(addr); }
+
 
     public static final int
             DISCRETE = 0,
@@ -16,20 +20,16 @@ public class Boost extends DTrees {
             GENTLE = 3;
 
 
-    protected Boost(long addr) {
-        super(addr);
-    }
-
-
     //
     // C++:  int getBoostType()
     //
 
-    //javadoc: Boost::create()
-    public static Boost create() {
-
-        Boost retVal = new Boost(create_0());
-
+    //javadoc: Boost::getBoostType()
+    public  int getBoostType()
+    {
+        
+        int retVal = getBoostType_0(nativeObj);
+        
         return retVal;
     }
 
@@ -38,45 +38,107 @@ public class Boost extends DTrees {
     // C++:  void setBoostType(int val)
     //
 
-    // C++:  int getBoostType()
-    private static native int getBoostType_0(long nativeObj);
+    //javadoc: Boost::setBoostType(val)
+    public  void setBoostType(int val)
+    {
+        
+        setBoostType_0(nativeObj, val);
+        
+        return;
+    }
 
 
     //
     // C++:  int getWeakCount()
     //
 
-    // C++:  void setBoostType(int val)
-    private static native void setBoostType_0(long nativeObj, int val);
+    //javadoc: Boost::getWeakCount()
+    public  int getWeakCount()
+    {
+        
+        int retVal = getWeakCount_0(nativeObj);
+        
+        return retVal;
+    }
 
 
     //
     // C++:  void setWeakCount(int val)
     //
 
-    // C++:  int getWeakCount()
-    private static native int getWeakCount_0(long nativeObj);
+    //javadoc: Boost::setWeakCount(val)
+    public  void setWeakCount(int val)
+    {
+        
+        setWeakCount_0(nativeObj, val);
+        
+        return;
+    }
 
 
     //
     // C++:  double getWeightTrimRate()
     //
 
-    // C++:  void setWeakCount(int val)
-    private static native void setWeakCount_0(long nativeObj, int val);
+    //javadoc: Boost::getWeightTrimRate()
+    public  double getWeightTrimRate()
+    {
+        
+        double retVal = getWeightTrimRate_0(nativeObj);
+        
+        return retVal;
+    }
 
 
     //
     // C++:  void setWeightTrimRate(double val)
     //
 
-    // C++:  double getWeightTrimRate()
-    private static native double getWeightTrimRate_0(long nativeObj);
+    //javadoc: Boost::setWeightTrimRate(val)
+    public  void setWeightTrimRate(double val)
+    {
+        
+        setWeightTrimRate_0(nativeObj, val);
+        
+        return;
+    }
 
 
     //
     // C++: static Ptr_Boost create()
     //
+
+    //javadoc: Boost::create()
+    public static Boost create()
+    {
+        
+        Boost retVal = new Boost(create_0());
+        
+        return retVal;
+    }
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
+
+
+    // C++:  int getBoostType()
+    private static native int getBoostType_0(long nativeObj);
+
+    // C++:  void setBoostType(int val)
+    private static native void setBoostType_0(long nativeObj, int val);
+
+    // C++:  int getWeakCount()
+    private static native int getWeakCount_0(long nativeObj);
+
+    // C++:  void setWeakCount(int val)
+    private static native void setWeakCount_0(long nativeObj, int val);
+
+    // C++:  double getWeightTrimRate()
+    private static native double getWeightTrimRate_0(long nativeObj);
 
     // C++:  void setWeightTrimRate(double val)
     private static native void setWeightTrimRate_0(long nativeObj, double val);
@@ -86,58 +148,5 @@ public class Boost extends DTrees {
 
     // native support for java finalize()
     private static native void delete(long nativeObj);
-
-    //javadoc: Boost::getBoostType()
-    public int getBoostType() {
-
-        int retVal = getBoostType_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: Boost::setBoostType(val)
-    public void setBoostType(int val) {
-
-        setBoostType_0(nativeObj, val);
-
-        return;
-    }
-
-    //javadoc: Boost::getWeakCount()
-    public int getWeakCount() {
-
-        int retVal = getWeakCount_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: Boost::setWeakCount(val)
-    public void setWeakCount(int val) {
-
-        setWeakCount_0(nativeObj, val);
-
-        return;
-    }
-
-    //javadoc: Boost::getWeightTrimRate()
-    public double getWeightTrimRate() {
-
-        double retVal = getWeightTrimRate_0(nativeObj);
-
-        return retVal;
-    }
-
-    //javadoc: Boost::setWeightTrimRate(val)
-    public void setWeightTrimRate(double val) {
-
-        setWeightTrimRate_0(nativeObj, val);
-
-        return;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
-    }
 
 }

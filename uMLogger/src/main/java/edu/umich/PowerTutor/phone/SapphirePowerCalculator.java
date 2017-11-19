@@ -32,11 +32,11 @@ import android.content.Context;
  * the hardware model details will be the same modulo the coefficients.
  */
 public class SapphirePowerCalculator extends DreamPowerCalculator {
-    public SapphirePowerCalculator(Context context) {
-        super(new SapphireConstants(context));
-    }
+  public SapphirePowerCalculator(Context context) {
+    super(new SapphireConstants(context));
+  }
 
-    public SapphirePowerCalculator(PhoneConstants coeffs) {
-        super(coeffs);
-    }
+  public SapphirePowerCalculator(PhoneConstants coeffs) {
+    super(coeffs);
+  }
 }

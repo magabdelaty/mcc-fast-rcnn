@@ -11,26 +11,13 @@ import android.content.pm.PackageManager;
  */
 interface ActivityLike {
     void startActivity(Intent intent) throws ActivityNotFoundException;
-
     void startActivityForResult(Intent intent, int requestCode) throws ActivityNotFoundException;
-
-    /**
-     * Might be null
-     */
+    /** Might be null */
     ContentResolver getContentResolver();
-
-    /**
-     * Might be null
-     */
+    /** Might be null */
     PackageManager getPackageManager();
-
-    /**
-     * Might be null
-     */
+    /** Might be null */
     FragmentManager getFragmentManager();
-
-    /**
-     * Might be null
-     */
+    /** Might be null */
     android.support.v4.app.FragmentManager getSupportFragmentManager();
 }

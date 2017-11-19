@@ -37,23 +37,23 @@ public class MockHttpURLConnection extends HttpURLConnection {
     }
 
     @Override
-    public boolean getDoOutput() {
-        return mDoOutput;
-    }
-
-    @Override
     public void setDoOutput(boolean flag) {
         mDoOutput = flag;
     }
 
     @Override
-    public String getRequestMethod() {
-        return mRequestMethod;
+    public boolean getDoOutput() {
+        return mDoOutput;
     }
 
     @Override
     public void setRequestMethod(String method) {
         mRequestMethod = method;
+    }
+
+    @Override
+    public String getRequestMethod() {
+        return mRequestMethod;
     }
 
     @Override

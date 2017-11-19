@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 // TODO: the name of this class sucks
-@SuppressWarnings({"serial", "rawtypes"})
+@SuppressWarnings({ "serial", "rawtypes" })
 public class WaitableQueue extends PriorityBlockingQueue<Request> {
     private final Request<?> mStopRequest = new MagicStopRequest();
     private final Semaphore mStopEvent = new Semaphore(0);

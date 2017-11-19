@@ -65,287 +65,291 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-/**
- * The main view activity for PowerTutor
- */
-public class UMLogger extends Activity {
-    public static final String CURRENT_VERSION = "1.2"; // Don't change this...
-    public static final String SERVER_IP = "spidermonkey.eecs.umich.edu";
-    public static final int SERVER_PORT = 5204;
-    private static final String TAG = "UMLogger";
-    private static final int MENU_PREFERENCES = 0;
-    private static final int MENU_SAVE_LOG = 1;
-    private static final int DIALOG_START_SENDING = 0;
-    private static final int DIALOG_STOP_SENDING = 1;
-    private static final int DIALOG_TOS = 2;
-    private static final int DIALOG_RUNNING_ON_STARTUP = 3;
-    private static final int DIALOG_NOT_RUNNING_ON_STARTUP = 4;
-    private static final int DIALOG_UNKNOWN_PHONE = 5;
-    private SharedPreferences prefs;
-    private Intent serviceIntent;
-    private ICounterService counterService;
-    private CounterServiceConnection conn;
-    private Button serviceStartButton;
-    private Button appViewerButton;
-    private Button sysViewerButton;
-    private Button helpButton;
-    private TextView scaleText;
-    private Button.OnClickListener appViewerButtonListener =
-            new Button.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), PowerTop.class);
-                    startActivityForResult(intent, 0);
-                }
-            };
-    private Button.OnClickListener sysViewerButtonListener =
-            new Button.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), PowerTabs.class);
-                    startActivityForResult(intent, 0);
-                }
-            };
-    private Button.OnClickListener serviceStartButtonListener =
-            new Button.OnClickListener() {
-                public void onClick(View v) {
-                    serviceStartButton.setEnabled(false);
-                    if (counterService != null) {
-                        stopService(serviceIntent);
-                    } else {
-                        if (conn == null) {
-                            Toast.makeText(UMLogger.this, "Profiler failed to start",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            startService(serviceIntent);
-                        }
-                    }
-                }
-            };
-    private Button.OnClickListener helpButtonListener =
-            new Button.OnClickListener() {
-                public void onClick(View v) {
-                    Intent myIntent = new Intent(v.getContext(), Help.class);
-                    startActivityForResult(myIntent, 0);
-                }
-            };
+/** The main view activity for PowerTutor*/
+public class UMLogger extends Activity  {
+  private static final String TAG = "UMLogger";
 
-    /**
-     * Called when the activity is first created.
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        serviceIntent = new Intent(this, UMLoggerService.class);
-        conn = new CounterServiceConnection();
+  public static final String CURRENT_VERSION = "1.2"; // Don't change this...
 
-        setContentView(R.layout.main);
-        ArrayAdapter<?> adapterxaxis = ArrayAdapter.createFromResource(
-                this, R.array.xaxis, android.R.layout.simple_spinner_item);
-        adapterxaxis.setDropDownViewResource(
-                android.R.layout.simple_spinner_dropdown_item);
+  public static final String SERVER_IP = "spidermonkey.eecs.umich.edu";
+  public static final int SERVER_PORT = 5204;
 
-        serviceStartButton = (Button) findViewById(R.id.servicestartbutton);
-        appViewerButton = (Button) findViewById(R.id.appviewerbutton);
-        sysViewerButton = (Button) findViewById(R.id.sysviewerbutton);
-        helpButton = (Button) findViewById(R.id.helpbutton);
+  private SharedPreferences prefs;
+  private Intent serviceIntent;
+  private ICounterService counterService;
+  private CounterServiceConnection conn;
 
-        serviceStartButton.setOnClickListener(serviceStartButtonListener);
-        sysViewerButton.setOnClickListener(sysViewerButtonListener);
-        appViewerButton.setOnClickListener(appViewerButtonListener);
-        helpButton.setOnClickListener(helpButtonListener);
+  private Button serviceStartButton;
+  private Button appViewerButton;
+  private Button sysViewerButton;
+  private Button helpButton;
+  private TextView scaleText;
 
-        if (counterService != null) {
-            serviceStartButton.setText("Stop Profiler");
-            appViewerButton.setEnabled(true);
-            sysViewerButton.setEnabled(true);
-        } else {
-            serviceStartButton.setText("Start Profiler");
-            appViewerButton.setEnabled(false);
-            sysViewerButton.setEnabled(false);
-        }
+  /** Called when the activity is first created. */
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState); 
+    prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    serviceIntent = new Intent(this, UMLoggerService.class);
+    conn = new CounterServiceConnection();
+
+    setContentView(R.layout.main);
+    ArrayAdapter<?> adapterxaxis = ArrayAdapter.createFromResource(
+          this, R.array.xaxis, android.R.layout.simple_spinner_item);
+    adapterxaxis.setDropDownViewResource(
+          android.R.layout.simple_spinner_dropdown_item);
+
+    serviceStartButton = (Button)findViewById(R.id.servicestartbutton);
+    appViewerButton = (Button)findViewById(R.id.appviewerbutton);
+    sysViewerButton = (Button)findViewById(R.id.sysviewerbutton);
+    helpButton= (Button)findViewById(R.id.helpbutton);
+
+    serviceStartButton.setOnClickListener(serviceStartButtonListener);
+    sysViewerButton.setOnClickListener(sysViewerButtonListener);
+    appViewerButton.setOnClickListener(appViewerButtonListener);
+    helpButton.setOnClickListener(helpButtonListener);
+         
+    if(counterService != null) {
+      serviceStartButton.setText("Stop Profiler");  
+      appViewerButton.setEnabled(true);
+      sysViewerButton.setEnabled(true);
+    } else {
+      serviceStartButton.setText("Start Profiler");
+      appViewerButton.setEnabled(false);
+      sysViewerButton.setEnabled(false);
     }
+  }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getApplicationContext().bindService(serviceIntent, conn, 0);
-        if (prefs.getBoolean("firstRun", true)) {
-            if (PhoneSelector.getPhoneType() == PhoneSelector.PHONE_UNKNOWN) {
-                showDialog(DIALOG_UNKNOWN_PHONE);
-            } else {
-                showDialog(DIALOG_TOS);
+  @Override
+  public void onResume() {
+    super.onResume();
+    getApplicationContext().bindService(serviceIntent, conn, 0);
+    if(prefs.getBoolean("firstRun", true)) {
+      if(PhoneSelector.getPhoneType() == PhoneSelector.PHONE_UNKNOWN) {
+        showDialog(DIALOG_UNKNOWN_PHONE);
+      } else {
+        showDialog(DIALOG_TOS);
+      }
+    }
+    Intent startingIntent = getIntent();
+    if(startingIntent.getBooleanExtra("isFromIcon", false)) {
+      Intent copyIntent = (Intent)getIntent().clone();
+      copyIntent.putExtra("isFromIcon", false);
+      setIntent(copyIntent);
+      Intent intent = new Intent(this, PowerTabs.class);
+      startActivity(intent);
+    }
+  }
+   
+  @Override
+  public void onPause() {
+    super.onPause();
+    getApplicationContext().unbindService(conn);
+  }
+
+  private static final int MENU_PREFERENCES = 0;
+  private static final int MENU_SAVE_LOG = 1;
+  private static final int DIALOG_START_SENDING = 0;
+  private static final int DIALOG_STOP_SENDING = 1;
+  private static final int DIALOG_TOS = 2;
+  private static final int DIALOG_RUNNING_ON_STARTUP = 3;
+  private static final int DIALOG_NOT_RUNNING_ON_STARTUP = 4;
+  private static final int DIALOG_UNKNOWN_PHONE = 5;
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    menu.add(0, MENU_PREFERENCES, 0, "Options");
+    menu.add(0, MENU_SAVE_LOG, 0, "Save log");
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch(item.getItemId()) {
+      case MENU_PREFERENCES:
+        startActivity(new Intent(this, EditPreferences.class));
+        return true;
+      case MENU_SAVE_LOG:
+        new Thread() {
+          public void start() {
+            File writeFile = new File(
+                Environment.getExternalStorageDirectory(), "PowerTrace" + 
+                    System.currentTimeMillis() + ".log");
+            try {
+              InflaterInputStream logIn = new InflaterInputStream(
+                  openFileInput("PowerTrace.log"));
+              BufferedOutputStream logOut = new BufferedOutputStream(
+                  new FileOutputStream(writeFile));
+
+              byte[] buffer = new byte[20480];
+              for(int ln = logIn.read(buffer); ln != -1;
+                      ln = logIn.read(buffer)) {
+                logOut.write(buffer, 0, ln);
+              }
+              logIn.close();
+              logOut.close();
+              Toast.makeText(UMLogger.this, "Wrote log to " +
+                             writeFile.getAbsolutePath(),
+                             Toast.LENGTH_SHORT).show();
+              return;
+            } catch(java.io.EOFException e) {
+              Toast.makeText(UMLogger.this, "Wrote log to " +
+                             writeFile.getAbsolutePath(),
+                             Toast.LENGTH_SHORT).show();
+              return;
+            } catch(IOException e) {
             }
-        }
-        Intent startingIntent = getIntent();
-        if (startingIntent.getBooleanExtra("isFromIcon", false)) {
-            Intent copyIntent = (Intent) getIntent().clone();
-            copyIntent.putExtra("isFromIcon", false);
-            setIntent(copyIntent);
-            Intent intent = new Intent(this, PowerTabs.class);
-            startActivity(intent);
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getApplicationContext().unbindService(conn);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, MENU_PREFERENCES, 0, "Options");
-        menu.add(0, MENU_SAVE_LOG, 0, "Save log");
+            Toast.makeText(UMLogger.this, "Failed to write log to sdcard",
+                           Toast.LENGTH_SHORT).show();
+          }
+        }.start();
         return true;
     }
+    return super.onOptionsItemSelected(item);
+  }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_PREFERENCES:
-                startActivity(new Intent(this, EditPreferences.class));
-                return true;
-            case MENU_SAVE_LOG:
-                new Thread() {
-                    public void start() {
-                        File writeFile = new File(
-                                Environment.getExternalStorageDirectory(), "PowerTrace" +
-                                System.currentTimeMillis() + ".log");
-                        try {
-                            InflaterInputStream logIn = new InflaterInputStream(
-                                    openFileInput("PowerTrace.log"));
-                            BufferedOutputStream logOut = new BufferedOutputStream(
-                                    new FileOutputStream(writeFile));
+  /**This function includes all the dialog constructor*/
+  @Override
+  protected Dialog onCreateDialog(int id) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    switch(id) {
+      case DIALOG_TOS:
+        builder.setMessage(R.string.term)
+          .setCancelable(false)
+          .setPositiveButton("Agree", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+              prefs.edit().putBoolean("firstRun", false)
+                          .putBoolean("runOnStartup", true)
+                          .putBoolean("sendPermission", true).commit();
+              dialog.dismiss();
+            }
+          })
+          .setNegativeButton("Do not agree",
+             new DialogInterface.OnClickListener() {
+               public void onClick(DialogInterface dialog, int id) {
+                 prefs.edit().putBoolean("firstRun", true).commit();
+                 finish();
+               }
+          });
+        return builder.create();
+      case DIALOG_STOP_SENDING:
+        builder.setMessage(R.string.stop_sending_text)
+          .setCancelable(true)
+          .setPositiveButton("Stop", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+              prefs.edit().putBoolean("sendPermission", false).commit();
+              dialog.dismiss();
+            }
+          })
+          .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+              dialog.cancel();
+            }
+          });
+        return builder.create();
+      case DIALOG_START_SENDING:
+        builder.setMessage(R.string.start_sending_text)
+          .setCancelable(true)
+          .setPositiveButton("Start", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+              prefs.edit().putBoolean("sendPermission", true).commit();
+              dialog.dismiss();
+            }
+          })
+          .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+              dialog.cancel();
+            }
+          });
+        return builder.create();
+      case DIALOG_RUNNING_ON_STARTUP:
+        builder.setMessage(R.string.running_on_startup)
+          .setCancelable(true)
+          .setNeutralButton("Ok", null);
+        return builder.create();
+      case DIALOG_NOT_RUNNING_ON_STARTUP:
+        builder.setMessage(R.string.not_running_on_startup)
+          .setCancelable(true)
+          .setNeutralButton("Ok", null);
+        return builder.create();
+      case DIALOG_UNKNOWN_PHONE:
+        builder.setMessage(R.string.unknown_phone)
+          .setCancelable(false)
+          .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+              dialog.dismiss();
+              showDialog(DIALOG_TOS);
+            }
+          });
+        return builder.create();
+        
+    }        
+    return null;
+  }
 
-                            byte[] buffer = new byte[20480];
-                            for (int ln = logIn.read(buffer); ln != -1;
-                                 ln = logIn.read(buffer)) {
-                                logOut.write(buffer, 0, ln);
-                            }
-                            logIn.close();
-                            logOut.close();
-                            Toast.makeText(UMLogger.this, "Wrote log to " +
-                                            writeFile.getAbsolutePath(),
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        } catch (java.io.EOFException e) {
-                            Toast.makeText(UMLogger.this, "Wrote log to " +
-                                            writeFile.getAbsolutePath(),
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        } catch (IOException e) {
-                        }
-                        Toast.makeText(UMLogger.this, "Failed to write log to sdcard",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }.start();
-                return true;
+    
+  private Button.OnClickListener appViewerButtonListener =
+    new Button.OnClickListener() {
+      public void onClick(View v) {
+        Intent intent = new Intent(v.getContext(), PowerTop.class);
+        startActivityForResult(intent, 0);
+      }
+  };
+    
+  private Button.OnClickListener sysViewerButtonListener =
+    new Button.OnClickListener()  {
+      public void onClick(View v) {
+        Intent intent = new Intent(v.getContext(), PowerTabs.class);
+        startActivityForResult(intent, 0);
+      }
+  };
+    
+  private Button.OnClickListener serviceStartButtonListener =
+    new Button.OnClickListener() {
+      public void onClick(View v) {
+        serviceStartButton.setEnabled(false);
+        if(counterService != null) {
+          stopService(serviceIntent);
+        } else {
+          if(conn == null) {
+            Toast.makeText(UMLogger.this, "Profiler failed to start",
+                           Toast.LENGTH_SHORT).show();
+          } else {
+            startService(serviceIntent);
+          }
         }
-        return super.onOptionsItemSelected(item);
+      }
+  };
+
+  private class CounterServiceConnection implements ServiceConnection {
+    public void onServiceConnected(ComponentName className, 
+                                   IBinder boundService) {
+      counterService = ICounterService.Stub.asInterface((IBinder)boundService);
+      serviceStartButton.setText("Stop Profiler");
+      serviceStartButton.setEnabled(true);
+      appViewerButton.setEnabled(true);
+      sysViewerButton.setEnabled(true);
     }
 
-    /**
-     * This function includes all the dialog constructor
-     */
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        switch (id) {
-            case DIALOG_TOS:
-                builder.setMessage(R.string.term)
-                        .setCancelable(false)
-                        .setPositiveButton("Agree", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                prefs.edit().putBoolean("firstRun", false)
-                                        .putBoolean("runOnStartup", true)
-                                        .putBoolean("sendPermission", true).commit();
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("Do not agree",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        prefs.edit().putBoolean("firstRun", true).commit();
-                                        finish();
-                                    }
-                                });
-                return builder.create();
-            case DIALOG_STOP_SENDING:
-                builder.setMessage(R.string.stop_sending_text)
-                        .setCancelable(true)
-                        .setPositiveButton("Stop", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                prefs.edit().putBoolean("sendPermission", false).commit();
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                return builder.create();
-            case DIALOG_START_SENDING:
-                builder.setMessage(R.string.start_sending_text)
-                        .setCancelable(true)
-                        .setPositiveButton("Start", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                prefs.edit().putBoolean("sendPermission", true).commit();
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-                return builder.create();
-            case DIALOG_RUNNING_ON_STARTUP:
-                builder.setMessage(R.string.running_on_startup)
-                        .setCancelable(true)
-                        .setNeutralButton("Ok", null);
-                return builder.create();
-            case DIALOG_NOT_RUNNING_ON_STARTUP:
-                builder.setMessage(R.string.not_running_on_startup)
-                        .setCancelable(true)
-                        .setNeutralButton("Ok", null);
-                return builder.create();
-            case DIALOG_UNKNOWN_PHONE:
-                builder.setMessage(R.string.unknown_phone)
-                        .setCancelable(false)
-                        .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                                showDialog(DIALOG_TOS);
-                            }
-                        });
-                return builder.create();
+    public void onServiceDisconnected(ComponentName className) {
+      counterService = null;
+      getApplicationContext().unbindService(conn);
+      getApplicationContext().bindService(serviceIntent, conn, 0);
 
-        }
-        return null;
+      Toast.makeText(UMLogger.this, "Profiler stopped",
+                     Toast.LENGTH_SHORT).show();
+      serviceStartButton.setText("Start Profiler");
+      serviceStartButton.setEnabled(true);
+      appViewerButton.setEnabled(false);
+      sysViewerButton.setEnabled(false);
     }
-
-    private class CounterServiceConnection implements ServiceConnection {
-        public void onServiceConnected(ComponentName className,
-                                       IBinder boundService) {
-            counterService = ICounterService.Stub.asInterface((IBinder) boundService);
-            serviceStartButton.setText("Stop Profiler");
-            serviceStartButton.setEnabled(true);
-            appViewerButton.setEnabled(true);
-            sysViewerButton.setEnabled(true);
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            counterService = null;
-            getApplicationContext().unbindService(conn);
-            getApplicationContext().bindService(serviceIntent, conn, 0);
-
-            Toast.makeText(UMLogger.this, "Profiler stopped",
-                    Toast.LENGTH_SHORT).show();
-            serviceStartButton.setText("Start Profiler");
-            serviceStartButton.setEnabled(true);
-            appViewerButton.setEnabled(false);
-            sysViewerButton.setEnabled(false);
-        }
-    }
+  }
+   
+  private Button.OnClickListener helpButtonListener =
+    new Button.OnClickListener() {
+      public void onClick(View v) {
+        Intent myIntent = new Intent(v.getContext(), Help.class);
+        startActivityForResult(myIntent, 0);
+      }
+  };
 }

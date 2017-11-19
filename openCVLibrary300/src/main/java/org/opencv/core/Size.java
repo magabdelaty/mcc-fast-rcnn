@@ -63,7 +63,7 @@ public class Size {
 
     @Override
     public String toString() {
-        return (int) width + "x" + (int) height;
+        return (int)width + "x" + (int)height;
     }
 
 }

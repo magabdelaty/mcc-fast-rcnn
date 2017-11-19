@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 /* //device/apps/common/assets/res/any/dimens.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -29,7 +30,7 @@
     <dimen name="dbx_action_bar_subtitle_top_margin">-3dp</dimen>
     <!-- Bottom margin for action bar subtitles -->
     <dimen name="dbx_action_bar_subtitle_bottom_margin">9dip</dimen>
-
+    
     <integer name="dbx_max_action_buttons">5</integer>
 
     <!-- Minimum width for an action button in the menu area of an action bar -->

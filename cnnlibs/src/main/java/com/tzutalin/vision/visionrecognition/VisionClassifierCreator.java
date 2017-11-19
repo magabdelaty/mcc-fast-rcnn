@@ -41,7 +41,6 @@ public final class VisionClassifierCreator {
 
     /**
      * Create an instance using a default {@link SceneClassifier} instance
-     *
      * @return {@link SceneClassifier instance
      */
     @NonNull
@@ -51,7 +50,6 @@ public final class VisionClassifierCreator {
 
     /**
      * Create an instance using a default {@link ObjectDetector} instance
-     *
      * @return {@link ObjectDetector} instance
      */
     @NonNull

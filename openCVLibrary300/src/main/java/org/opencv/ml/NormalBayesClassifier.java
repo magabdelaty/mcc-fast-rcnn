@@ -10,31 +10,55 @@ import org.opencv.core.Mat;
 //javadoc: NormalBayesClassifier
 public class NormalBayesClassifier extends StatModel {
 
-    protected NormalBayesClassifier(long addr) {
-        super(addr);
-    }
+    protected NormalBayesClassifier(long addr) { super(addr); }
 
 
     //
     // C++:  float predictProb(Mat inputs, Mat& outputs, Mat& outputProbs, int flags = 0)
     //
 
-    //javadoc: NormalBayesClassifier::create()
-    public static NormalBayesClassifier create() {
-
-        NormalBayesClassifier retVal = new NormalBayesClassifier(create_0());
-
+    //javadoc: NormalBayesClassifier::predictProb(inputs, outputs, outputProbs, flags)
+    public  float predictProb(Mat inputs, Mat outputs, Mat outputProbs, int flags)
+    {
+        
+        float retVal = predictProb_0(nativeObj, inputs.nativeObj, outputs.nativeObj, outputProbs.nativeObj, flags);
+        
         return retVal;
     }
 
-    // C++:  float predictProb(Mat inputs, Mat& outputs, Mat& outputProbs, int flags = 0)
-    private static native float predictProb_0(long nativeObj, long inputs_nativeObj, long outputs_nativeObj, long outputProbs_nativeObj, int flags);
+    //javadoc: NormalBayesClassifier::predictProb(inputs, outputs, outputProbs)
+    public  float predictProb(Mat inputs, Mat outputs, Mat outputProbs)
+    {
+        
+        float retVal = predictProb_1(nativeObj, inputs.nativeObj, outputs.nativeObj, outputProbs.nativeObj);
+        
+        return retVal;
+    }
 
 
     //
     // C++: static Ptr_NormalBayesClassifier create()
     //
 
+    //javadoc: NormalBayesClassifier::create()
+    public static NormalBayesClassifier create()
+    {
+        
+        NormalBayesClassifier retVal = new NormalBayesClassifier(create_0());
+        
+        return retVal;
+    }
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        delete(nativeObj);
+    }
+
+
+
+    // C++:  float predictProb(Mat inputs, Mat& outputs, Mat& outputProbs, int flags = 0)
+    private static native float predictProb_0(long nativeObj, long inputs_nativeObj, long outputs_nativeObj, long outputProbs_nativeObj, int flags);
     private static native float predictProb_1(long nativeObj, long inputs_nativeObj, long outputs_nativeObj, long outputProbs_nativeObj);
 
     // C++: static Ptr_NormalBayesClassifier create()
@@ -42,26 +66,5 @@ public class NormalBayesClassifier extends StatModel {
 
     // native support for java finalize()
     private static native void delete(long nativeObj);
-
-    //javadoc: NormalBayesClassifier::predictProb(inputs, outputs, outputProbs, flags)
-    public float predictProb(Mat inputs, Mat outputs, Mat outputProbs, int flags) {
-
-        float retVal = predictProb_0(nativeObj, inputs.nativeObj, outputs.nativeObj, outputProbs.nativeObj, flags);
-
-        return retVal;
-    }
-
-    //javadoc: NormalBayesClassifier::predictProb(inputs, outputs, outputProbs)
-    public float predictProb(Mat inputs, Mat outputs, Mat outputProbs) {
-
-        float retVal = predictProb_1(nativeObj, inputs.nativeObj, outputs.nativeObj, outputProbs.nativeObj);
-
-        return retVal;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        delete(nativeObj);
-    }
 
 }

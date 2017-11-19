@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:dbx="https://android.dropbox.com/StringsSchema">
+<?xml version="1.0" encoding="utf-8"?><resources xmlns:dbx="https://android.dropbox.com/StringsSchema">
     <string name="dbx_install_main">Dropbox アプリをインストールしてください</string>
     <string name="dbx_install_sub">Dropbox をインストールすれば、お気に入りのアプリから自分のアイテムにアクセスできます！</string>
     <string name="dbx_install">Dropbox をインストールする</string>

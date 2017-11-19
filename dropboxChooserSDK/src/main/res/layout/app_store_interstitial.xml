@@ -3,19 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <FrameLayout
         android:id="@+id/dbx_button_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true" >
 
         <include
             android:id="@+id/dbx_button_bar"
-            layout="@layout/bottom_bar_light"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            layout="@layout/bottom_bar_light" />
     </FrameLayout>
 
     <LinearLayout
@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/dbx_button_container"
         android:background="@color/lightBlueBackground"
-        android:orientation="vertical">
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/dbx_install_title"
@@ -36,8 +36,9 @@
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:textColor="#ffffff"
-            android:textSize="@dimen/dbx_action_bar_title_text_size"></TextView>
-
+            android:textSize="@dimen/dbx_action_bar_title_text_size" >
+        </TextView>
+        
         <View
             android:id="@+id/dbx_separator"
             android:layout_width="fill_parent"
@@ -61,7 +62,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/dbx_install_main"

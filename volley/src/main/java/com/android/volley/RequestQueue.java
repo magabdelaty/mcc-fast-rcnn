@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A request dispatch queue with a thread pool of dispatchers.
- * <p>
+ *
  * Calling {@link #add(Request)} will enqueue the given Request for dispatch,
  * resolving from either cache or network on a worker thread, and then delivering
  * a parsed response on the main thread.
@@ -38,18 +38,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 @SuppressWarnings("rawtypes")
 public class RequestQueue {
 
-    /**
-     * Number of network request dispatcher threads to start.
-     */
-    private static final int DEFAULT_NETWORK_THREAD_POOL_SIZE = 4;
+    /** Used for generating monotonically-increasing sequence numbers for requests. */
+    private AtomicInteger mSequenceGenerator = new AtomicInteger();
+
     /**
      * Staging area for requests that already have a duplicate request in flight.
-     * <p>
+     *
      * <ul>
-     * <li>containsKey(cacheKey) indicates that there is a request in flight for the given cache
-     * key.</li>
-     * <li>get(cacheKey) returns waiting requests for the given cache key. The in flight request
-     * is <em>not</em> contained in that list. Is null if no requests are staged.</li>
+     *     <li>containsKey(cacheKey) indicates that there is a request in flight for the given cache
+     *          key.</li>
+     *     <li>get(cacheKey) returns waiting requests for the given cache key. The in flight request
+     *          is <em>not</em> contained in that list. Is null if no requests are staged.</li>
      * </ul>
      */
     private final Map<String, Queue<Request>> mWaitingRequests =
@@ -62,53 +61,42 @@ public class RequestQueue {
      */
     private final Set<Request> mCurrentRequests = new HashSet<Request>();
 
-    /**
-     * The cache triage queue.
-     */
+    /** The cache triage queue. */
     private final PriorityBlockingQueue<Request> mCacheQueue =
-            new PriorityBlockingQueue<Request>();
+        new PriorityBlockingQueue<Request>();
 
-    /**
-     * The queue of requests that are actually going out to the network.
-     */
+    /** The queue of requests that are actually going out to the network. */
     private final PriorityBlockingQueue<Request> mNetworkQueue =
-            new PriorityBlockingQueue<Request>();
-    /**
-     * Cache interface for retrieving and storing respones.
-     */
+        new PriorityBlockingQueue<Request>();
+
+    /** Number of network request dispatcher threads to start. */
+    private static final int DEFAULT_NETWORK_THREAD_POOL_SIZE = 4;
+
+    /** Cache interface for retrieving and storing respones. */
     private final Cache mCache;
-    /**
-     * Network interface for performing requests.
-     */
+
+    /** Network interface for performing requests. */
     private final Network mNetwork;
-    /**
-     * Response delivery mechanism.
-     */
+
+    /** Response delivery mechanism. */
     private final ResponseDelivery mDelivery;
-    /**
-     * Used for generating monotonically-increasing sequence numbers for requests.
-     */
-    private AtomicInteger mSequenceGenerator = new AtomicInteger();
-    /**
-     * The network dispatchers.
-     */
+
+    /** The network dispatchers. */
     private NetworkDispatcher[] mDispatchers;
 
-    /**
-     * The cache dispatcher.
-     */
+    /** The cache dispatcher. */
     private CacheDispatcher mCacheDispatcher;
 
     /**
      * Creates the worker pool. Processing will not begin until {@link #start()} is called.
      *
-     * @param cache          A Cache to use for persisting responses to disk
-     * @param network        A Network interface for performing HTTP requests
+     * @param cache A Cache to use for persisting responses to disk
+     * @param network A Network interface for performing HTTP requests
      * @param threadPoolSize Number of network dispatcher threads to create
-     * @param delivery       A ResponseDelivery interface for posting responses and errors
+     * @param delivery A ResponseDelivery interface for posting responses and errors
      */
     public RequestQueue(Cache cache, Network network, int threadPoolSize,
-                        ResponseDelivery delivery) {
+            ResponseDelivery delivery) {
         mCache = cache;
         mNetwork = network;
         mDispatchers = new NetworkDispatcher[threadPoolSize];
@@ -118,8 +106,8 @@ public class RequestQueue {
     /**
      * Creates the worker pool. Processing will not begin until {@link #start()} is called.
      *
-     * @param cache          A Cache to use for persisting responses to disk
-     * @param network        A Network interface for performing HTTP requests
+     * @param cache A Cache to use for persisting responses to disk
+     * @param network A Network interface for performing HTTP requests
      * @param threadPoolSize Number of network dispatcher threads to create
      */
     public RequestQueue(Cache cache, Network network, int threadPoolSize) {
@@ -130,7 +118,7 @@ public class RequestQueue {
     /**
      * Creates the worker pool. Processing will not begin until {@link #start()} is called.
      *
-     * @param cache   A Cache to use for persisting responses to disk
+     * @param cache A Cache to use for persisting responses to disk
      * @param network A Network interface for performing HTTP requests
      */
     public RequestQueue(Cache cache, Network network) {
@@ -184,8 +172,15 @@ public class RequestQueue {
     }
 
     /**
+     * A simple predicate or filter interface for Requests, for use by
+     * {@link RequestQueue#cancelAll(RequestFilter)}.
+     */
+    public interface RequestFilter {
+        public boolean apply(Request<?> request);
+    }
+
+    /**
      * Cancels all requests in this queue for which the given filter applies.
-     *
      * @param filter The filtering function to use
      */
     public void cancelAll(RequestFilter filter) {
@@ -216,7 +211,6 @@ public class RequestQueue {
 
     /**
      * Adds a Request to the dispatch queue.
-     *
      * @param request The request to service
      * @return The passed-in request
      */
@@ -264,9 +258,9 @@ public class RequestQueue {
     /**
      * Called from {@link Request#finish(String)}, indicating that processing of the given request
      * has finished.
-     * <p>
+     *
      * <p>Releases waiting requests for <code>request.getCacheKey()</code> if
-     * <code>request.shouldCache()</code>.</p>
+     *      <code>request.shouldCache()</code>.</p>
      */
     void finish(Request request) {
         // Remove from the set of requests currently being processed.
@@ -289,13 +283,5 @@ public class RequestQueue {
                 }
             }
         }
-    }
-
-    /**
-     * A simple predicate or filter interface for Requests, for use by
-     * {@link RequestQueue#cancelAll(RequestFilter)}.
-     */
-    public interface RequestFilter {
-        public boolean apply(Request<?> request);
     }
 }

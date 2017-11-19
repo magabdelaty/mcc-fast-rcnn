@@ -30,7 +30,6 @@ import com.simplicity.maged.mccobjectdetection.components.contextManager.Provide
 import com.simplicity.maged.mccobjectdetection.components.contextManager.UserPreferences;
 import com.simplicity.maged.mccobjectdetection.components.decisionModel.AppService;
 import com.simplicity.maged.mccobjectdetection.components.decisionModel.OffloadingDecision;
-import com.simplicity.maged.mccobjectdetection.components.decisionModel.SelectedPlan;
 import com.simplicity.maged.mccobjectdetection.components.executionPlans.Plans;
 import com.simplicity.maged.mccobjectdetection.components.logger.SimplicityLogger;
 
@@ -222,7 +221,6 @@ public class ExecutionEngine {
                 .getAutomatic_offloading(context);
         Boolean forceLocal = UserPreferences.getForce_local(context);
         Boolean forceOffloading = UserPreferences.getForce_offloading(context);
-        SelectedPlan sPlan = new SelectedPlan();
         ArrayList<Provider> providers = Providers.getProviders();
         Provider sProvider = new Provider();
         // ==========
@@ -258,12 +256,12 @@ public class ExecutionEngine {
                 sProvider = providers.get(0);
                 if (ContextEngine.getMobileInternet()) {
                     offloadingDecision = OffloadingDecision.getObjDet3GDecision(
-                            costLocal_profiled.totalCost / 1000, lContext.pCompute, upDataSize, downDataCloud_profiled,
+                            costLocal_profiled.totalCost/1000, lContext.pCompute, upDataSize, downDataCloud_profiled,
                             eContext[0].upBW3, lContext.pTransmit, lContext.pIdeal,
                             lContext.computeSpeed, eContext[0].computeSpeed);
                 } else if (ContextEngine.getWifi()) {
                     offloadingDecision = OffloadingDecision.getObjDetWiFiDecision(
-                            costLocal_profiled.totalCost / 1000, lContext.pCompute, upDataSize, downDataCloud_profiled,
+                            costLocal_profiled.totalCost/1000, lContext.pCompute, upDataSize, downDataCloud_profiled,
                             eContext[0].upBW3, eContext[0].downBW3, lContext.pTransmit, lContext.pIdeal,
                             lContext.computeSpeed, eContext[0].computeSpeed);
                 }

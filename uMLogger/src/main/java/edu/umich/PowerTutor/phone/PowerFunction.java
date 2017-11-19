@@ -22,5 +22,5 @@ package edu.umich.PowerTutor.phone;
 import edu.umich.PowerTutor.service.PowerData;
 
 public interface PowerFunction {
-    public double calculate(PowerData data);
+  public double calculate(PowerData data);
 }

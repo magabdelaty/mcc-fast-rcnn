@@ -23,220 +23,220 @@ import android.widget.TextView;
 
 public class FilePicker extends ListActivity {
 
-    public final static String EXTRA_FILE_PATH = "file_path";
-    public final static String EXTRA_SHOW_HIDDEN_FILES = "show_hidden_files";
-    public final static String EXTRA_ACCEPTED_FILE_EXTENSIONS = "accepted_file_extensions";
-    private static String DEFAULT_INITIAL_DIRECTORY = "/";
+	public final static String EXTRA_FILE_PATH = "file_path";
+	public final static String EXTRA_SHOW_HIDDEN_FILES = "show_hidden_files";
+	public final static String EXTRA_ACCEPTED_FILE_EXTENSIONS = "accepted_file_extensions";
+	private static String DEFAULT_INITIAL_DIRECTORY = "/";
 
-    protected File Directory;
-    protected ArrayList<File> Files;
-    protected FilePickerListAdapter Adapter;
-    protected boolean ShowHiddenFiles = false;
-    protected String[] acceptedFileExtensions;
+	protected File Directory;
+	protected ArrayList<File> Files;
+	protected FilePickerListAdapter Adapter;
+	protected boolean ShowHiddenFiles = false;
+	protected String[] acceptedFileExtensions;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		LayoutInflater inflator = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View emptyView = inflator.inflate(R.layout.empty_view, null);
-        ((ViewGroup) getListView().getParent()).addView(emptyView);
-        getListView().setEmptyView(emptyView);
+		View emptyView = inflator.inflate(R.layout.empty_view, null);
+		((ViewGroup) getListView().getParent()).addView(emptyView);
+		getListView().setEmptyView(emptyView);
 
-        // Set initial directory
-        Directory = new File(DEFAULT_INITIAL_DIRECTORY);
+		// Set initial directory
+		Directory = new File(DEFAULT_INITIAL_DIRECTORY);
 
-        // Initialize the ArrayList
-        Files = new ArrayList<File>();
+		// Initialize the ArrayList
+		Files = new ArrayList<File>();
 
-        // Set the ListAdapter
-        Adapter = new FilePickerListAdapter(this, Files);
-        setListAdapter(Adapter);
+		// Set the ListAdapter
+		Adapter = new FilePickerListAdapter(this, Files);
+		setListAdapter(Adapter);
 
-        // Initialize the extensions array to allow any file extensions
-        acceptedFileExtensions = new String[]{};
+		// Initialize the extensions array to allow any file extensions
+		acceptedFileExtensions = new String[] {};
 
-        // Get intent extras
-        if (getIntent().hasExtra(EXTRA_FILE_PATH))
-            Directory = new File(getIntent().getStringExtra(EXTRA_FILE_PATH));
+		// Get intent extras
+		if (getIntent().hasExtra(EXTRA_FILE_PATH))
+			Directory = new File(getIntent().getStringExtra(EXTRA_FILE_PATH));
 
-        if (getIntent().hasExtra(EXTRA_SHOW_HIDDEN_FILES))
-            ShowHiddenFiles = getIntent().getBooleanExtra(
-                    EXTRA_SHOW_HIDDEN_FILES, false);
+		if (getIntent().hasExtra(EXTRA_SHOW_HIDDEN_FILES))
+			ShowHiddenFiles = getIntent().getBooleanExtra(
+					EXTRA_SHOW_HIDDEN_FILES, false);
 
-        if (getIntent().hasExtra(EXTRA_ACCEPTED_FILE_EXTENSIONS)) {
+		if (getIntent().hasExtra(EXTRA_ACCEPTED_FILE_EXTENSIONS)) {
 
-            ArrayList<String> collection = getIntent().getStringArrayListExtra(
-                    EXTRA_ACCEPTED_FILE_EXTENSIONS);
+			ArrayList<String> collection = getIntent().getStringArrayListExtra(
+					EXTRA_ACCEPTED_FILE_EXTENSIONS);
 
-            acceptedFileExtensions = collection.toArray(new String[collection
-                    .size()]);
-        }
-    }
+			acceptedFileExtensions = collection.toArray(new String[collection
+					.size()]);
+		}
+	}
 
-    @Override
-    protected void onResume() {
-        refreshFilesList();
-        super.onResume();
-    }
+	@Override
+	protected void onResume() {
+		refreshFilesList();
+		super.onResume();
+	}
 
-    protected void refreshFilesList() {
+	protected void refreshFilesList() {
 
-        Files.clear();
-        ExtensionFilenameFilter filter = new ExtensionFilenameFilter(
-                acceptedFileExtensions);
+		Files.clear();
+		ExtensionFilenameFilter filter = new ExtensionFilenameFilter(
+				acceptedFileExtensions);
 
-        File[] files = Directory.listFiles(filter);
+		File[] files = Directory.listFiles(filter);
 
-        if (files != null && files.length > 0) {
+		if (files != null && files.length > 0) {
 
-            for (File f : files) {
+			for (File f : files) {
 
-                if (f.isHidden() && !ShowHiddenFiles) {
+				if (f.isHidden() && !ShowHiddenFiles) {
 
-                    continue;
-                }
+					continue;
+				}
 
-                Files.add(f);
-            }
+				Files.add(f);
+			}
 
-            Collections.sort(Files, new FileComparator());
-        }
+			Collections.sort(Files, new FileComparator());
+		}
 
-        Adapter.notifyDataSetChanged();
-    }
+		Adapter.notifyDataSetChanged();
+	}
 
-    @Override
-    public void onBackPressed() {
+	@Override
+	public void onBackPressed() {
 
-        if (Directory.getParentFile() != null) {
+		if (Directory.getParentFile() != null) {
 
-            Directory = Directory.getParentFile();
-            refreshFilesList();
-            return;
-        }
+			Directory = Directory.getParentFile();
+			refreshFilesList();
+			return;
+		}
 
-        super.onBackPressed();
-    }
+		super.onBackPressed();
+	}
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
 
-        File newFile = (File) l.getItemAtPosition(position);
+		File newFile = (File) l.getItemAtPosition(position);
 
-        if (newFile.isFile()) {
+		if (newFile.isFile()) {
 
-            Intent extra = new Intent();
-            extra.putExtra(EXTRA_FILE_PATH, newFile.getAbsolutePath());
-            setResult(RESULT_OK, extra);
-            finish();
-        } else {
+			Intent extra = new Intent();
+			extra.putExtra(EXTRA_FILE_PATH, newFile.getAbsolutePath());
+			setResult(RESULT_OK, extra);
+			finish();
+		} else {
 
-            Directory = newFile;
-            refreshFilesList();
-        }
+			Directory = newFile;
+			refreshFilesList();
+		}
 
-        super.onListItemClick(l, v, position, id);
-    }
+		super.onListItemClick(l, v, position, id);
+	}
 
-    private class FilePickerListAdapter extends ArrayAdapter<File> {
+	private class FilePickerListAdapter extends ArrayAdapter<File> {
 
-        private List<File> mObjects;
+		private List<File> mObjects;
 
-        public FilePickerListAdapter(Context context, List<File> objects) {
+		public FilePickerListAdapter(Context context, List<File> objects) {
 
-            super(context, R.layout.list_item, android.R.id.text1, objects);
-            mObjects = objects;
-        }
+			super(context, R.layout.list_item, android.R.id.text1, objects);
+			mObjects = objects;
+		}
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
 
-            View row = null;
+			View row = null;
 
-            if (convertView == null) {
+			if (convertView == null) {
 
-                LayoutInflater inflater = (LayoutInflater) getContext()
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				LayoutInflater inflater = (LayoutInflater) getContext()
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                row = inflater.inflate(R.layout.list_item, parent, false);
-            } else
-                row = convertView;
+				row = inflater.inflate(R.layout.list_item, parent, false);
+			} else
+				row = convertView;
 
-            File object = mObjects.get(position);
+			File object = mObjects.get(position);
 
-            ImageView imageView = (ImageView) row
-                    .findViewById(R.id.file_picker_image);
-            TextView textView = (TextView) row
-                    .findViewById(R.id.file_picker_text);
-            textView.setSingleLine(true);
-            textView.setText(object.getName());
+			ImageView imageView = (ImageView) row
+					.findViewById(R.id.file_picker_image);
+			TextView textView = (TextView) row
+					.findViewById(R.id.file_picker_text);
+			textView.setSingleLine(true);
+			textView.setText(object.getName());
 
-            if (object.isFile())
-                imageView.setImageResource(R.drawable.file);
+			if (object.isFile())
+				imageView.setImageResource(R.drawable.file);
 
-            else
-                imageView.setImageResource(R.drawable.folder);
+			else
+				imageView.setImageResource(R.drawable.folder);
 
-            return row;
-        }
-    }
+			return row;
+		}
+	}
 
-    private class FileComparator implements Comparator<File> {
+	private class FileComparator implements Comparator<File> {
 
-        @Override
-        public int compare(File f1, File f2) {
+		@Override
+		public int compare(File f1, File f2) {
 
-            if (f1 == f2)
-                return 0;
+			if (f1 == f2)
+				return 0;
 
-            if (f1.isDirectory() && f2.isFile())
-                // Show directories above files
-                return -1;
+			if (f1.isDirectory() && f2.isFile())
+				// Show directories above files
+				return -1;
 
-            if (f1.isFile() && f2.isDirectory())
-                // Show files below directories
-                return 1;
+			if (f1.isFile() && f2.isDirectory())
+				// Show files below directories
+				return 1;
 
-            // Sort the directories alphabetically
-            return f1.getName().compareToIgnoreCase(f2.getName());
-        }
-    }
+			// Sort the directories alphabetically
+			return f1.getName().compareToIgnoreCase(f2.getName());
+		}
+	}
 
-    private class ExtensionFilenameFilter implements FilenameFilter {
+	private class ExtensionFilenameFilter implements FilenameFilter {
 
-        private String[] Extensions;
+		private String[] Extensions;
 
-        public ExtensionFilenameFilter(String[] extensions) {
+		public ExtensionFilenameFilter(String[] extensions) {
 
-            super();
-            Extensions = extensions;
-        }
+			super();
+			Extensions = extensions;
+		}
 
-        @Override
-        public boolean accept(File dir, String filename) {
+		@Override
+		public boolean accept(File dir, String filename) {
 
-            if (new File(dir, filename).isDirectory()) {
+			if (new File(dir, filename).isDirectory()) {
 
-                // Accept all directory names
-                return true;
-            }
+				// Accept all directory names
+				return true;
+			}
 
-            if (Extensions != null && Extensions.length > 0) {
+			if (Extensions != null && Extensions.length > 0) {
 
-                for (int i = 0; i < Extensions.length; i++) {
+				for (int i = 0; i < Extensions.length; i++) {
 
-                    if (filename.endsWith(Extensions[i])) {
+					if (filename.endsWith(Extensions[i])) {
 
-                        // The filename ends with the extension
-                        return true;
-                    }
-                }
-                // The filename did not match any of the extensions
-                return false;
-            }
-            // No extensions has been set. Accept all file extensions.
-            return true;
-        }
-    }
+						// The filename ends with the extension
+						return true;
+					}
+				}
+				// The filename did not match any of the extensions
+				return false;
+			}
+			// No extensions has been set. Accept all file extensions.
+			return true;
+		}
+	}
 }

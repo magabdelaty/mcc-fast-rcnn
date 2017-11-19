@@ -1,8 +1,8 @@
 {
   "provider_uuid": "ed66359e-faad-49ff-bacf-92bdfe2459ac",
-  "energyAvail": 0,
-  "memoryAvail": 0,
-  "computeSpeed": 0,
+  "energyAvail":0,
+  "memoryAvail":0,
+  "computeSpeed":0,
   "avail_services": [
     {
       "android_service": "com.simplicity.maged.mccobjectdetection.services.ImageBlurringService",

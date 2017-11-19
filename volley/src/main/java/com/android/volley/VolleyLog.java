@@ -23,9 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Logging helper class.
- */
+/** Logging helper class. */
 public class VolleyLog {
     public static String TAG = "Volley";
 
@@ -105,16 +103,25 @@ public class VolleyLog {
     static class MarkerLog {
         public static final boolean ENABLED = VolleyLog.DEBUG;
 
-        /**
-         * Minimum duration from first marker to last in an marker log to warrant logging.
-         */
+        /** Minimum duration from first marker to last in an marker log to warrant logging. */
         private static final long MIN_DURATION_FOR_LOGGING_MS = 0;
+
+        private static class Marker {
+            public final String name;
+            public final long thread;
+            public final long time;
+
+            public Marker(String name, long thread, long time) {
+                this.name = name;
+                this.thread = thread;
+                this.time = time;
+            }
+        }
+
         private final List<Marker> mMarkers = new ArrayList<Marker>();
         private boolean mFinished = false;
 
-        /**
-         * Adds a marker to this log with the specified name.
-         */
+        /** Adds a marker to this log with the specified name. */
         public synchronized void add(String name, long threadId) {
             if (mFinished) {
                 throw new IllegalStateException("Marker added to finished log");
@@ -126,7 +133,6 @@ public class VolleyLog {
         /**
          * Closes the log, dumping it to logcat if the time difference between
          * the first and last markers is greater than {@link #MIN_DURATION_FOR_LOGGING_MS}.
-         *
          * @param header Header string to print above the marker log.
          */
         public synchronized void finish(String header) {
@@ -156,9 +162,7 @@ public class VolleyLog {
             }
         }
 
-        /**
-         * Returns the time difference between the first and last events in this log.
-         */
+        /** Returns the time difference between the first and last events in this log. */
         private long getTotalDuration() {
             if (mMarkers.size() == 0) {
                 return 0;
@@ -167,18 +171,6 @@ public class VolleyLog {
             long first = mMarkers.get(0).time;
             long last = mMarkers.get(mMarkers.size() - 1).time;
             return last - first;
-        }
-
-        private static class Marker {
-            public final String name;
-            public final long thread;
-            public final long time;
-
-            public Marker(String name, long thread, long time) {
-                this.name = name;
-                this.thread = thread;
-                this.time = time;
-            }
         }
     }
 }

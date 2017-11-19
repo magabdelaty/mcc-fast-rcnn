@@ -6,7 +6,7 @@
     <service>
         <name>com.simplicity.maged.mccobjectdetection.services.SceneRecognitionService</name>
     </service>
-    <service>
+     <service>
         <name>com.simplicity.maged.mccobjectdetection.services.SortPrimeService</name>
         <leaf>com.simplicity.maged.mccobjectdetection.services.BubbleSortService</leaf>
         <leaf>com.simplicity.maged.mccobjectdetection.services.PrimeFactorsService</leaf>

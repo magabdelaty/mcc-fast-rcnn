@@ -33,8 +33,8 @@ service will be used if Wifi is rarely available.  If you would like to disable
 sending traces you can do so in the menu or by turning off background data in
 the android options.
     </p></string>
-    <string name="help_head"> <big><b>PowerTutor</b></big> - A real-time system and application power monitor.</string>
-    <string name="help_text">\n
+    <string name ="help_head"> <big><b>PowerTutor</b></big> - A real-time system and application power monitor.</string>
+    <string name ="help_text">\n
     <ul>
     <li><b>Main control panel</b>\n
      - Start/stop profiling services. \n
@@ -85,6 +85,6 @@ the android options.
     </string>
 
 
-    <string name="url_1">For detailed information, please go to: </string>
-    <string name="url_2"><a href="http://powertutor.org">http://powertutor.org</a>.\n</string>
+<string name="url_1">For detailed information, please go to: </string>
+<string name="url_2"><a href = "http://powertutor.org">http://powertutor.org</a>.\n</string>
 </resources>

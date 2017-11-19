@@ -35,7 +35,6 @@ import java.util.List;
  */
 public abstract class CaffeClassifier<T> {
     protected static boolean sInitialized;
-
     static {
         try {
             System.loadLibrary("objrek");
@@ -59,10 +58,11 @@ public abstract class CaffeClassifier<T> {
     private String mSelectedLabel;
 
     /**
-     * @param modelPath   Caffe's model
+     *
+     * @param modelPath Caffe's model
      * @param wieghtsPath Caffe's trained wieght
-     * @param manefile    The file path of the image image
-     * @param synsetFile  The file path to load label's titles
+     * @param manefile The file path of the image image
+     * @param synsetFile The file path to load label's titles
      */
     protected CaffeClassifier(Context context, String modelPath, String wieghtsPath, String manefile, String synsetFile) {
         mContext = context;
@@ -71,8 +71,6 @@ public abstract class CaffeClassifier<T> {
         mMeanPath = manefile;
         mSynsetPath = synsetFile;
     }
-
-    private native static void jniNativeClassInit();
 
     /**
      * Init image width and height and start to load model, weight, allocate byte buffer, etc.
@@ -86,9 +84,8 @@ public abstract class CaffeClassifier<T> {
         mImgHeight = imgHeight;
     }
 
-    /**
+     /**
      * Pass the image path to do classifiction or detection
-     *
      * @param imgPath image path
      * @return
      */
@@ -96,7 +93,6 @@ public abstract class CaffeClassifier<T> {
 
     /**
      * Pass {@link android.graphics.Bitmap} graphic object to do classifiction or detection
-     *
      * @param bitmap
      * @return
      */
@@ -107,6 +103,7 @@ public abstract class CaffeClassifier<T> {
      */
     public void deInit() {
     }
+
 
     public void setSelectedLabel(String label) {
         mSelectedLabel = label;
@@ -143,4 +140,6 @@ public abstract class CaffeClassifier<T> {
         }
         return null;
     }
+
+    private native static void jniNativeClassInit();
 }

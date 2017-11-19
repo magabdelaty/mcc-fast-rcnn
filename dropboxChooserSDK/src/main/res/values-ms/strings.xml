@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:dbx="https://android.dropbox.com/StringsSchema">
+<?xml version="1.0" encoding="utf-8"?><resources xmlns:dbx="https://android.dropbox.com/StringsSchema">
     <string name="dbx_install_main">Sila pasang apl Dropbox</string>
     <string name="dbx_install_sub">Dengan Dropbox dipasang, anda boleh mengakses semua barang anda dalam apl kegemaran anda, seperti yang ini!</string>
     <string name="dbx_install">Pasang Dropbox</string>

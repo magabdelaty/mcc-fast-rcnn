@@ -28,8 +28,8 @@ import java.util.List;
  */
 
 public class ObjectDetectionService {
-    private final static String TAG = "simplicity"; //"ObjectDetectionService";
     private static com.tzutalin.vision.visionrecognition.ObjectDetector mObjectDet;
+    private final static String TAG = "simplicity"; //"ObjectDetectionService";
 
     public static String[] Execute(final String filePath, Context context) {
         try {

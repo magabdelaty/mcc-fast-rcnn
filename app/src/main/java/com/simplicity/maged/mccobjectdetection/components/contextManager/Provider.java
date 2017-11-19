@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class Provider {
 
-    public UUID id;
-    public String url;
-    public Boolean permanentFlag;
+	public UUID id;
+	public String url;
+	public Boolean permanentFlag;
 }

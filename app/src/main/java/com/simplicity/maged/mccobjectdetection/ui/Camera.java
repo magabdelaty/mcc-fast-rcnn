@@ -1,30 +1,30 @@
 package com.simplicity.maged.mccobjectdetection.ui;
 
-import android.annotation.TargetApi;
-import android.content.ComponentName;
-import android.content.ContentUris;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.os.Parcelable;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
+import android.annotation.TargetApi;  
+import android.content.ComponentName;  
+import android.content.ContentUris;  
+import android.content.Context;  
+import android.content.Intent;  
+import android.content.pm.PackageManager;  
+import android.content.pm.ResolveInfo;  
+import android.database.Cursor;  
+import android.graphics.Bitmap;  
+import android.graphics.BitmapFactory;  
+import android.graphics.Matrix;  
+import android.media.ExifInterface;  
+import android.net.Uri;  
+import android.os.Build;  
+import android.os.Environment;  
+import android.os.Parcelable;  
+import android.provider.DocumentsContract;  
+import android.provider.MediaStore;  
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.io.File;  
+import java.io.FileOutputStream;  
+import java.io.IOException;  
+import java.util.ArrayList;  
+import java.util.Calendar;  
 import java.util.List;
 
 public class Camera {
@@ -91,7 +91,7 @@ public class Camera {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
+                final String[] selectionArgs = new String[] {
                         split[1]
                 };
 
@@ -115,8 +115,8 @@ public class Camera {
         return null;
     }
 
-    private static String getDataColumn(Context context, Uri uri,
-                                        String selection, String[] selectionArgs) {
+    private static String getDataColumn(Context context, Uri uri, 
+                      String selection, String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";
@@ -139,7 +139,7 @@ public class Camera {
         return null;
     }
 
-    private static int getImageOrientation(String imagePath) {
+    private static int getImageOrientation(String imagePath){
         int rotate = 0;
         try {
 
@@ -167,8 +167,8 @@ public class Camera {
         return rotate;
     }
 
-    private static int calculateInSampleSize(BitmapFactory.Options options,
-                                             int reqWidth, int reqHeight) {
+    private static int calculateInSampleSize(BitmapFactory.Options options, 
+                              int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
@@ -185,7 +185,7 @@ public class Camera {
     public static Intent photoIntent(Context context, File photoFile) {
         List<Intent> cameraIntents = new ArrayList<>();
         Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (photoFile != null)
+        if (photoFile != null) 
             captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
         PackageManager packageManager = context.getPackageManager();
         final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
@@ -193,7 +193,7 @@ public class Camera {
             String packageName = res.activityInfo.packageName;
             Intent intent = new Intent(captureIntent);
             intent.setComponent(
-                    new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+                new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
             intent.setPackage(packageName);
             cameraIntents.add(intent);
         }
@@ -202,18 +202,18 @@ public class Camera {
         galleryIntent.setType("image/*");
         galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
         Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
-                cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, 
+            cameraIntents.toArray(new Parcelable[cameraIntents.size()]));
         return chooserIntent;
     }
 
     public static File createImageFile() throws IOException {
         String dir = Environment.getExternalStorageDirectory() + File.separator
-                + "Pictures" + File.separator + "SomeFolder" + File.separator;
+             + "Pictures" + File.separator + "SomeFolder" + File.separator;
         File directory = new File(dir);
         if (directory.mkdir()) Log.d("dir created", dir);
         return new File(dir, JPEG_FILE_PREFIX
-                + Calendar.getInstance().getTimeInMillis() + JPEG_FILE_SUFFIX);
+             + Calendar.getInstance().getTimeInMillis() + JPEG_FILE_SUFFIX);
     }
 
     public static String photoResult(Context context, File file, Intent data) {
@@ -225,7 +225,7 @@ public class Camera {
             isCamera = action != null && action.equals("inline-data");
         } else isCamera = true;
 
-        if (isCamera) {
+        if(isCamera) {
             image = file.getAbsolutePath();
         } else {
             image = getPath(context, data.getData());
@@ -242,8 +242,8 @@ public class Camera {
             bitmap = getResizedBitmap(bitmap, 1024);
             Matrix matrix = new Matrix();
             matrix.postRotate(getImageOrientation(image));
-            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-                    bitmap.getHeight(), matrix, true);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), 
+                bitmap.getHeight(), matrix, true);
             FileOutputStream out = null;
             if (image != null) {
                 try {
@@ -267,9 +267,9 @@ public class Camera {
 
     }
 
-    private static Bitmap getResizedBitmap(Bitmap source, int size) {
+    private static Bitmap getResizedBitmap(Bitmap source, int size){
 
-        if (source.getWidth() > size) {
+        if(source.getWidth()>size) {
             double ar = (double) source.getHeight() / (double) source.getWidth();
 
             int y = (int) (ar * size);

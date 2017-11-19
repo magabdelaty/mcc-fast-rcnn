@@ -42,137 +42,138 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 
 public class LCD extends PowerComponent {
-    private static final String[] BACKLIGHT_BRIGHTNESS_FILES = {
-            "/sys/devices/virtual/leds/lcd-backlight/brightness",
-            "/sys/devices/platform/trout-backlight.0/leds/lcd-backlight/brightness",
+  public static class LcdData extends PowerData {
+    private static Recycler<LcdData> recycler = new Recycler<LcdData>();
+
+    public static LcdData obtain() {
+      LcdData result = recycler.obtain();
+      if(result != null) return result;
+      return new LcdData();
+    }
+
+    @Override
+    public void recycle() {
+      recycler.recycle(this);
+    }
+
+	  public int brightness;
+	  public boolean screenOn;
+	
+    private LcdData() {
+    }
+
+    public void init(int brightness, boolean screenOn) {
+      this.brightness = brightness;
+      this.screenOn = screenOn;
+    }
+	
+	  public void writeLogDataInfo(OutputStreamWriter out) throws IOException {
+      StringBuilder res = new StringBuilder();
+      res.append("LCD-brightness ").append(brightness)
+         .append("\nLCD-screen-on ").append(screenOn).append("\n");
+      out.write(res.toString());
+    }
+  }
+
+	private final String TAG = "LCD";
+  private static final String[] BACKLIGHT_BRIGHTNESS_FILES = {
+    "/sys/devices/virtual/leds/lcd-backlight/brightness",
+    "/sys/devices/platform/trout-backlight.0/leds/lcd-backlight/brightness",
+  };
+
+  private Context context;
+  private ForegroundDetector foregroundDetector;
+  private BroadcastReceiver broadcastReceiver;
+  private boolean screenOn;
+
+  private String brightnessFile;
+
+  public LCD(Context context) {
+    this.context = context;
+    screenOn = true;
+
+    if(context == null) {
+      return;
+    }
+
+    foregroundDetector = new ForegroundDetector((ActivityManager)
+        context.getSystemService(context.ACTIVITY_SERVICE));
+    broadcastReceiver = new BroadcastReceiver() {
+      public void onReceive(Context context, Intent intent) {
+        synchronized(this) {
+          if(intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+            screenOn = false;
+          } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+            screenOn = true;
+          }
+        }
+      };
     };
-    private final String TAG = "LCD";
-    private Context context;
-    private ForegroundDetector foregroundDetector;
-    private BroadcastReceiver broadcastReceiver;
-    private boolean screenOn;
-    private String brightnessFile;
+    IntentFilter intentFilter = new IntentFilter();
+    intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+    intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+    context.registerReceiver(broadcastReceiver, intentFilter);
 
-    public LCD(Context context) {
-        this.context = context;
-        screenOn = true;
+    for(int i = 0; i < BACKLIGHT_BRIGHTNESS_FILES.length; i++) {
+      if(new File(BACKLIGHT_BRIGHTNESS_FILES[i]).exists()) {
+        brightnessFile = BACKLIGHT_BRIGHTNESS_FILES[i];
+      }
+    }
+  }
 
-        if (context == null) {
-            return;
-        }
+  @Override
+  protected void onExit() {
+    context.unregisterReceiver(broadcastReceiver);
+    super.onExit();
+  } 
 
-        foregroundDetector = new ForegroundDetector((ActivityManager)
-                context.getSystemService(context.ACTIVITY_SERVICE));
-        broadcastReceiver = new BroadcastReceiver() {
-            public void onReceive(Context context, Intent intent) {
-                synchronized (this) {
-                    if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                        screenOn = false;
-                    } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                        screenOn = true;
-                    }
-                }
-            }
+  @Override
+  public IterationData calculateIteration(long iteration) {
+    IterationData result = IterationData.obtain();
 
-            ;
-        };
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
-        context.registerReceiver(broadcastReceiver, intentFilter);
-
-        for (int i = 0; i < BACKLIGHT_BRIGHTNESS_FILES.length; i++) {
-            if (new File(BACKLIGHT_BRIGHTNESS_FILES[i]).exists()) {
-                brightnessFile = BACKLIGHT_BRIGHTNESS_FILES[i];
-            }
-        }
+    boolean screen;
+    synchronized(this) {
+      screen = screenOn;
     }
 
-    @Override
-    protected void onExit() {
-        context.unregisterReceiver(broadcastReceiver);
-        super.onExit();
-    }
-
-    @Override
-    public IterationData calculateIteration(long iteration) {
-        IterationData result = IterationData.obtain();
-
-        boolean screen;
-        synchronized (this) {
-            screen = screenOn;
-        }
-
-        int brightness;
-        if (brightnessFile != null) {
-            brightness = (int) SystemInfo.getInstance()
-                    .readLongFromFile(brightnessFile);
-        } else {
-            try {
-                brightness = Settings.System.getInt(context.getContentResolver(),
-                        Settings.System.SCREEN_BRIGHTNESS);
-            } catch (Settings.SettingNotFoundException ex) {
-                Log.w(TAG, "Could not retrieve brightness information");
-                return result;
-            }
-        }
-        if (brightness < 0 || 255 < brightness) {
-            Log.w(TAG, "Could not retrieve brightness information");
-            return result;
-        }
-
-        LcdData data = LcdData.obtain();
-        data.init(brightness, screen);
-        result.setPowerData(data);
-
-        if (screen) {
-            LcdData uidData = LcdData.obtain();
-            uidData.init(brightness, screen);
-            result.addUidPowerData(foregroundDetector.getForegroundUid(), uidData);
-        }
-
+    int brightness;
+    if(brightnessFile != null) {
+      brightness = (int)SystemInfo.getInstance()
+          .readLongFromFile(brightnessFile);
+    } else {
+      try {
+        brightness = Settings.System.getInt(context.getContentResolver(),
+                                            Settings.System.SCREEN_BRIGHTNESS);
+      } catch(Settings.SettingNotFoundException ex) {
+        Log.w(TAG, "Could not retrieve brightness information");
         return result;
+      }
+    }
+    if(brightness < 0 || 255 < brightness) {
+      Log.w(TAG, "Could not retrieve brightness information");
+      return result;
     }
 
-    @Override
-    public boolean hasUidInformation() {
-        return true;
+    LcdData data = LcdData.obtain();
+    data.init(brightness, screen);
+    result.setPowerData(data);
+
+    if(screen) {
+      LcdData uidData = LcdData.obtain();
+      uidData.init(brightness, screen);
+      result.addUidPowerData(foregroundDetector.getForegroundUid(), uidData);
     }
 
-    @Override
-    public String getComponentName() {
-        return "LCD";
-    }
+    return result;
+  }
 
-    public static class LcdData extends PowerData {
-        private static Recycler<LcdData> recycler = new Recycler<LcdData>();
-        public int brightness;
-        public boolean screenOn;
+  @Override
+  public boolean hasUidInformation() {
+    return true;
+  }
 
-        private LcdData() {
-        }
-
-        public static LcdData obtain() {
-            LcdData result = recycler.obtain();
-            if (result != null) return result;
-            return new LcdData();
-        }
-
-        @Override
-        public void recycle() {
-            recycler.recycle(this);
-        }
-
-        public void init(int brightness, boolean screenOn) {
-            this.brightness = brightness;
-            this.screenOn = screenOn;
-        }
-
-        public void writeLogDataInfo(OutputStreamWriter out) throws IOException {
-            StringBuilder res = new StringBuilder();
-            res.append("LCD-brightness ").append(brightness)
-                    .append("\nLCD-screen-on ").append(screenOn).append("\n");
-            out.write(res.toString());
-        }
-    }
+  @Override
+  public String getComponentName() {
+    return "LCD";
+  }
 }

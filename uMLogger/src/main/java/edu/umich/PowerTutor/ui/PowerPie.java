@@ -45,7 +45,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import edu.umich.PowerTutor.service.ICounterService;
 import edu.umich.PowerTutor.service.PowerEstimator;
 import edu.umich.PowerTutor.service.UMLoggerService;
@@ -53,237 +52,244 @@ import edu.umich.PowerTutor.util.Counter;
 import edu.umich.PowerTutor.util.SystemInfo;
 
 public class PowerPie extends Activity {
-    public static final int[] COLORS = new int[]{
-            Color.BLUE, Color.GREEN, Color.MAGENTA, Color.YELLOW,
-            Color.RED, Color.LTGRAY, Color.DKGRAY, Color.CYAN
-    };
-    private static final String TAG = "PowerPie";
-    private static final int MENU_WINDOW = 0;
-    private static final int DIALOG_WINDOW = 0;
-    private SharedPreferences prefs;
-    private int uid;
-    private String[] componentNames;
-    private int noUidMask;
-    private Runnable collector;
-    private Intent serviceIntent;
-    private CounterServiceConnection conn;
-    private ICounterService counterService;
-    private Handler handler;
-    private TextView displayText;
+  private static final String TAG = "PowerPie";
 
-    public void refreshView() {
-        if (counterService == null) {
-            TextView loadingText = new TextView(this);
-            loadingText.setText("Waiting for profiler service...");
-            loadingText.setGravity(Gravity.CENTER);
-            setContentView(loadingText);
-            return;
-        }
+  private SharedPreferences prefs;
+  private int uid;
 
-        if (uid == SystemInfo.AID_ALL) {
+  private String[] componentNames;
+  private int noUidMask;
+
+  private Runnable collector;
+
+  private Intent serviceIntent;
+  private CounterServiceConnection conn;
+  private ICounterService counterService;
+  private Handler handler;
+
+  private TextView displayText;
+
+  public static final int[] COLORS = new int[] {
+      Color.BLUE, Color.GREEN, Color.MAGENTA, Color.YELLOW,
+      Color.RED, Color.LTGRAY, Color.DKGRAY, Color.CYAN
+  };
+
+  public void refreshView() {
+    if(counterService == null) {
+      TextView loadingText = new TextView(this);
+      loadingText.setText("Waiting for profiler service...");
+      loadingText.setGravity(Gravity.CENTER);
+      setContentView(loadingText);
+      return;
+    }
+
+    if(uid == SystemInfo.AID_ALL) {
       /* If we are reporting global power usage then just set noUidMask to 0 so
        * that all components get displayed.
        */
-            noUidMask = 0;
-        }
+      noUidMask = 0;
+    }
 
-        displayText = new TextView(this);
-        displayText.setGravity(Gravity.CENTER);
-        updateDisplayText();
+    displayText = new TextView(this);
+    displayText.setGravity(Gravity.CENTER);
+    updateDisplayText();
 
-        final CategorySeries series = new CategorySeries("");
-        final DefaultRenderer renderer = new DefaultRenderer();
-        renderer.setLabelsTextSize(15);
-        renderer.setLegendTextSize(15);
-        renderer.setMargins(new int[]{5, 50, 5, 50});
+    final CategorySeries series = new CategorySeries("");
+    final DefaultRenderer renderer = new DefaultRenderer();
+    renderer.setLabelsTextSize(15);
+    renderer.setLegendTextSize(15);
+    renderer.setMargins(new int[] { 5, 50, 5, 50 });
 
-        PieChart pieChart = new PieChart(series, renderer);
-        final GraphicalView chartView = new GraphicalView(this, pieChart);
+    PieChart pieChart = new PieChart(series, renderer);
+    final GraphicalView chartView = new GraphicalView(this, pieChart);
 
     /* The collector is responsible for periodically updating the screen with
      * new energy usage information for the current uid.
      */
-        collector = new Runnable() {
-            public void run() {
-                try {
-                    long[] totals = counterService.getTotals(uid,
-                            prefs.getInt("pieWindowType", 0));
-                    long sumTotal = 0;
-                    for (int i = 0; i < totals.length; i++) {
-                        totals[i] = totals[i] * PowerEstimator.ITERATION_INTERVAL / 1000;
-                        sumTotal += totals[i];
-                    }
-                    int index = 0;
-                    if (sumTotal < 1e-7) {
-                        series.set(0, "No data", 1);
-                    } else for (int i = 0; i < totals.length; i++) {
-                        if ((noUidMask & 1 << i) != 0) {
-                            continue;
-                        }
-                        String prefix;
-                        double val = totals[i];
-                        if (val > 1e12) {
-                            prefix = "G";
-                            val /= 1e12;
-                        } else if (val > 1e9) {
-                            prefix = "M";
-                            val /= 1e9;
-                        } else if (val > 1e6) {
-                            prefix = "k";
-                            val /= 1e6;
-                        } else if (val > 1e3) {
-                            prefix = "";
-                            val /= 1e3;
-                        } else {
-                            prefix = "m";
-                        }
-
-                        String label = String.format("%1$s %2$.1f %3$sJ",
-                                componentNames[i], val, prefix);
-                        if (series.getItemCount() == index) {
-                            SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-                            r.setColor(COLORS[i]);
-                            renderer.addSeriesRenderer(r);
-
-                            series.add(label, totals[i]);
-                        } else {
-                            series.set(index, label, totals[i]);
-                        }
-                        index++;
-                    }
-                    chartView.invalidate();
-                } catch (RemoteException e) {
-                    Log.w(TAG, "Failed to contact power tutor profiling service");
-                }
-                if (handler != null) {
-                    handler.postDelayed(this, 2 * PowerEstimator.ITERATION_INTERVAL);
-                }
+    collector = new Runnable() {
+      public void run() {
+        try {
+          long[] totals = counterService.getTotals(uid,
+              prefs.getInt("pieWindowType", 0));
+          long sumTotal = 0;
+          for(int i = 0; i < totals.length; i++) {
+            totals[i] = totals[i] * PowerEstimator.ITERATION_INTERVAL / 1000;
+            sumTotal += totals[i];
+          }
+          int index = 0;
+          if(sumTotal < 1e-7) {
+            series.set(0, "No data", 1);
+          } else for(int i = 0; i < totals.length; i++) {
+            if((noUidMask & 1 << i) != 0) {
+              continue;
             }
-        };
-        if (handler != null) {
-            handler.post(collector);
+            String prefix;
+            double val = totals[i];
+            if(val > 1e12) {
+              prefix = "G";
+              val /= 1e12;
+            } else if(val > 1e9) {
+              prefix = "M";
+              val /= 1e9;
+            } else if(val > 1e6) {
+              prefix = "k";
+              val /= 1e6;
+            } else if(val > 1e3) {
+              prefix = "";
+              val /= 1e3;
+            } else {
+              prefix = "m";
+            }
+
+            String label = String.format("%1$s %2$.1f %3$sJ",
+                    componentNames[i], val, prefix);
+            if(series.getItemCount() == index) {
+              SimpleSeriesRenderer r = new SimpleSeriesRenderer();
+              r.setColor(COLORS[i]);
+              renderer.addSeriesRenderer(r);
+                
+              series.add(label, totals[i]);
+            } else {
+              series.set(index, label, totals[i]);
+            }
+            index++;
+          }
+          chartView.invalidate();
+        } catch(RemoteException e) {
+          Log.w(TAG, "Failed to contact power tutor profiling service");
         }
-
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.addView(displayText);
-        layout.addView(chartView);
-        setContentView(layout);
-    }
-
-    public void updateDisplayText() {
-        displayText.setText("Displaying energy usage over " +
-                Counter.WINDOW_DESCS[prefs.getInt("pieWindowType", 0)] + " for " +
-                (uid == SystemInfo.AID_ALL ? " the entire phone." :
-                        SystemInfo.getInstance().getUidName(uid, getPackageManager()) + "."));
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        uid = getIntent().getIntExtra("uid", SystemInfo.AID_ALL);
-
-        if (savedInstanceState != null) {
-            componentNames = savedInstanceState.getStringArray("componentNames");
-            noUidMask = savedInstanceState.getInt("noUidMask");
+        if(handler != null) {
+          handler.postDelayed(this, 2 * PowerEstimator.ITERATION_INTERVAL);
         }
-
-        serviceIntent = new Intent(this, UMLoggerService.class);
-        conn = new CounterServiceConnection();
+      }
+    };
+    if(handler != null) {
+      handler.post(collector);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        handler = new Handler();
-        getApplicationContext().bindService(serviceIntent, conn, 0);
+    LinearLayout layout = new LinearLayout(this);
+    layout.setOrientation(LinearLayout.VERTICAL);
+    layout.addView(displayText);
+    layout.addView(chartView);
+    setContentView(layout);
+  }
 
+  public void updateDisplayText() {
+    displayText.setText("Displaying energy usage over " +
+        Counter.WINDOW_DESCS[prefs.getInt("pieWindowType", 0)] + " for " +
+        (uid == SystemInfo.AID_ALL ? " the entire phone." :
+        SystemInfo.getInstance().getUidName(uid, getPackageManager()) + "."));
+  }
+
+  class CounterServiceConnection implements ServiceConnection {
+    public void onServiceConnected(ComponentName className, 
+                                   IBinder boundService ) {
+      counterService = ICounterService.Stub.asInterface((IBinder)boundService);
+      try {
+        componentNames = counterService.getComponents();
+        noUidMask = counterService.getNoUidMask();
         refreshView();
+      } catch(RemoteException e) {
+        counterService = null;
+      }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        getApplicationContext().unbindService(conn);
-        if (collector != null) {
-            handler.removeCallbacks(collector);
-            handler = null;
-        }
+    public void onServiceDisconnected(ComponentName className) {
+      counterService = null;
+      getApplicationContext().unbindService(conn);
+      getApplicationContext().bindService(serviceIntent, conn, 0);
+      Log.w(TAG, "Unexpectedly lost connection to service");
+    }
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    uid = getIntent().getIntExtra("uid", SystemInfo.AID_ALL);
+
+    if(savedInstanceState != null) {
+      componentNames = savedInstanceState.getStringArray("componentNames");
+      noUidMask = savedInstanceState.getInt("noUidMask");
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putStringArray("componentNames", componentNames);
-        outState.putInt("noUidMask", noUidMask);
-    }
+    serviceIntent = new Intent(this, UMLoggerService.class);
+    conn = new CounterServiceConnection();
+  }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, MENU_WINDOW, 0, "Time Span");
-        return true;
-    }
+  @Override
+  protected void onResume() {
+    super.onResume();
+    handler = new Handler();
+    getApplicationContext().bindService(serviceIntent, conn, 0);
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    refreshView();
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    getApplicationContext().unbindService(conn);
+    if(collector != null) {
+      handler.removeCallbacks(collector);
+      handler = null;
+    }
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putStringArray("componentNames", componentNames);
+    outState.putInt("noUidMask", noUidMask);
+  }
+
+  private static final int MENU_WINDOW = 0;
+  private static final int DIALOG_WINDOW = 0;
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    menu.add(0, MENU_WINDOW, 0, "Time Span");
+    return true;
+  }
+
+  @Override
+  public boolean onPrepareOptionsMenu(Menu menu) {
     /* We need to make sure that the user can't cause any of the dialogs to be
      * created before we have contacted the Power Tutor service to get the
      * component names and such.
      */
-        for (int i = 0; i < menu.size(); i++) {
-            menu.getItem(i).setEnabled(counterService != null);
-        }
+    for(int i = 0; i < menu.size(); i++) {
+      menu.getItem(i).setEnabled(counterService != null);
+    }
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch(item.getItemId()) {
+      case MENU_WINDOW:
+        showDialog(DIALOG_WINDOW);
         return true;
     }
+    return false;
+  }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_WINDOW:
-                showDialog(DIALOG_WINDOW);
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        switch (id) {
-            case DIALOG_WINDOW:
-                builder.setTitle("Select window type");
-                builder.setItems(Counter.WINDOW_NAMES,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int item) {
-                                prefs.edit().putInt("pieWindowType", item).commit();
-                                updateDisplayText();
-                            }
-                        });
-                return builder.create();
-        }
-        return null;
-    }
-
-    class CounterServiceConnection implements ServiceConnection {
-        public void onServiceConnected(ComponentName className,
-                                       IBinder boundService) {
-            counterService = ICounterService.Stub.asInterface((IBinder) boundService);
-            try {
-                componentNames = counterService.getComponents();
-                noUidMask = counterService.getNoUidMask();
-                refreshView();
-            } catch (RemoteException e) {
-                counterService = null;
+  @Override
+  protected Dialog onCreateDialog(int id) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    switch(id) {
+      case DIALOG_WINDOW:
+        builder.setTitle("Select window type");
+        builder.setItems(Counter.WINDOW_NAMES,
+          new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+              prefs.edit().putInt("pieWindowType", item).commit();
+              updateDisplayText();
             }
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            counterService = null;
-            getApplicationContext().unbindService(conn);
-            getApplicationContext().bindService(serviceIntent, conn, 0);
-            Log.w(TAG, "Unexpectedly lost connection to service");
-        }
+        });
+        return builder.create();
     }
+    return null;
+  }
 }
 

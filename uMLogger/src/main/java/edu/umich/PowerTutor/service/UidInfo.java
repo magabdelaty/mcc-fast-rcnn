@@ -24,40 +24,42 @@ import edu.umich.PowerTutor.util.Recycler;
 import java.io.Serializable;
 
 public class UidInfo implements Serializable, Comparable {
-    private static Recycler<UidInfo> recycler = new Recycler<UidInfo>();
-    public int uid;
-    public int currentPower;
-    public long totalEnergy;
-    public long runtime;
-    public transient double key;
-    public transient double percentage;
-    public transient String unit;
+  private static Recycler<UidInfo> recycler = new Recycler<UidInfo>();
 
-    private UidInfo() {
-    }
+  public static UidInfo obtain() {
+    UidInfo result = recycler.obtain();
+    if(result != null) return result;
+    return new UidInfo();
+  }
 
-    public static UidInfo obtain() {
-        UidInfo result = recycler.obtain();
-        if (result != null) return result;
-        return new UidInfo();
-    }
+  public void recycle() {
+    recycler.recycle(this);
+  }
 
-    public void recycle() {
-        recycler.recycle(this);
-    }
+  public int uid;
+  public int currentPower;
+  public long totalEnergy;
+  public long runtime;
 
-    public void init(int uid, int currentPower, long totalEnergy,
-                     long runtime) {
-        this.uid = uid;
-        this.currentPower = currentPower;
-        this.totalEnergy = totalEnergy;
-        this.runtime = runtime;
-    }
+  public transient double key;
+  public transient double percentage;
+  public transient String unit;
 
-    public int compareTo(Object o) {
-        UidInfo x = (UidInfo) o;
-        if (key > x.key) return -1;
-        if (key == x.key) return 0;
-        return 1;
-    }
+  private UidInfo() {
+  }
+
+  public void init(int uid, int currentPower, long totalEnergy,
+                   long runtime) {
+    this.uid = uid;
+    this.currentPower = currentPower;
+    this.totalEnergy = totalEnergy;
+    this.runtime = runtime;
+  }
+
+  public int compareTo(Object o) {
+    UidInfo x = (UidInfo)o;
+    if(key > x.key) return -1;
+    if(key == x.key) return 0;
+    return 1;
+  }
 }

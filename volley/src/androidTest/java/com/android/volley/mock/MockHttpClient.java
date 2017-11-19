@@ -34,7 +34,6 @@ import org.apache.http.protocol.HttpContext;
 
 
 public class MockHttpClient implements HttpClient {
-    public HttpUriRequest requestExecuted = null;
     private int mStatusCode = HttpStatus.SC_OK;
     private HttpEntity mResponseEntity = null;
 
@@ -49,6 +48,8 @@ public class MockHttpClient implements HttpClient {
         }
         mStatusCode = statusCode;
     }
+
+    public HttpUriRequest requestExecuted = null;
 
     // This is the only one we actually use.
     @Override
@@ -97,7 +98,7 @@ public class MockHttpClient implements HttpClient {
 
     @Override
     public <T> T execute(HttpHost arg0, HttpRequest arg1, ResponseHandler<? extends T> arg2,
-                         HttpContext arg3) {
+            HttpContext arg3) {
         throw new UnsupportedOperationException();
     }
 

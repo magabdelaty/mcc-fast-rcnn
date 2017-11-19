@@ -52,7 +52,7 @@ public class SceneClassifier extends CaffeClassifier<List<VisionDetRet>> {
         super(context, sceneModelPath, sceneWieghtsPath, sceneManefile, sceneSynsetFile);
         if (!new File(mModelPath).exists() ||
                 !new File(mWeightsPath).exists() ||
-                !new File(mSynsetPath).exists()) {
+                !new File(mSynsetPath).exists() ) {
             throw new IllegalAccessException("SceneClassifier cannot find model");
         }
     }

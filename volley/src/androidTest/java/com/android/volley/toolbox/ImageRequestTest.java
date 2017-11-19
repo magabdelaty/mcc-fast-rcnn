@@ -33,18 +33,6 @@ import java.io.InputStream;
 @SmallTest
 public class ImageRequestTest extends InstrumentationTestCase {
 
-    private static byte[] readRawResource(Resources res, int resId) throws IOException {
-        InputStream in = res.openRawResource(resId);
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int count;
-        while ((count = in.read(buffer)) != -1) {
-            bytes.write(buffer, 0, count);
-        }
-        in.close();
-        return bytes.toByteArray();
-    }
-
     public void testParseNetworkResponse_resizing() throws Exception {
         byte[] jpegBytes = readRawResource(
                 getInstrumentation().getContext().getResources(), R.raw.large_jpeg_1024_500);
@@ -71,7 +59,7 @@ public class ImageRequestTest extends InstrumentationTestCase {
     }
 
     private void verifyResize(NetworkResponse networkResponse, int maxWidth, int maxHeight,
-                              int expectedWidth, int expectedHeight) {
+            int expectedWidth, int expectedHeight) {
         ImageRequest request = new ImageRequest(
                 "", null, maxWidth, maxHeight, Config.RGB_565, null);
         Response<Bitmap> response = request.parseNetworkResponse(networkResponse);
@@ -95,6 +83,18 @@ public class ImageRequestTest extends InstrumentationTestCase {
 
         // just under 1/4 == 4
         assertEquals(4, ImageRequest.findBestSampleSize(100, 200, 24, 50));
+    }
+
+    private static byte[] readRawResource(Resources res, int resId) throws IOException {
+        InputStream in = res.openRawResource(resId);
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int count;
+        while ((count = in.read(buffer)) != -1) {
+            bytes.write(buffer, 0, count);
+        }
+        in.close();
+        return bytes.toByteArray();
     }
 
 }

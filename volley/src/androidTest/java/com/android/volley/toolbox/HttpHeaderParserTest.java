@@ -38,11 +38,6 @@ public class HttpHeaderParserTest extends TestCase {
     private NetworkResponse response;
     private Map<String, String> headers;
 
-    private static String rfc1123Date(long millis) {
-        DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
-        return df.format(new Date(millis));
-    }
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -164,6 +159,11 @@ public class HttpHeaderParserTest extends TestCase {
     private void assertEqualsWithin(long expected, long value, long fudgeFactor) {
         long diff = Math.abs(expected - value);
         assertTrue(diff < fudgeFactor);
+    }
+
+    private static String rfc1123Date(long millis) {
+        DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
+        return df.format(new Date(millis));
     }
 
     // --------------------------

@@ -24,26 +24,25 @@ import java.io.IOException;
 import java.util.Vector;
 
 public abstract class PowerData {
-    private int cachedPower;
+  private int cachedPower;
 
-    public PowerData() {
-    }
+  public PowerData() {
+  }
 
-    public int getCachedPower() {
-        return cachedPower;
-    }
+  public void setCachedPower(int power) {
+    cachedPower = power;
+  }
 
-    public void setCachedPower(int power) {
-        cachedPower = power;
-    }
+  public int getCachedPower() {
+    return cachedPower;
+  }
 
-    /* To be called when the PowerData object is no longer in use so that it can
-     * be used again in the next iteration if it chooses to be.
-     */
-    public void recycle() {
-    }
+  /* To be called when the PowerData object is no longer in use so that it can
+   * be used again in the next iteration if it chooses to be.
+   */
+  public void recycle() {}
 
-    /* Simply writes out log information to the passed stream. */
-    public abstract void writeLogDataInfo(OutputStreamWriter out)
-            throws IOException;
+  /* Simply writes out log information to the passed stream. */
+  public abstract void writeLogDataInfo(OutputStreamWriter out)
+      throws IOException;
 }

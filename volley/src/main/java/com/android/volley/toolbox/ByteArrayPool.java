@@ -52,29 +52,26 @@ import java.util.List;
  * least-recently-used buffers are disposed.
  */
 public class ByteArrayPool {
+    /** The buffer pool, arranged both by last use and by buffer size */
+    private List<byte[]> mBuffersByLastUse = new LinkedList<byte[]>();
+    private List<byte[]> mBuffersBySize = new ArrayList<byte[]>(64);
+
+    /** The total size of the buffers in the pool */
+    private int mCurrentSize = 0;
+
     /**
-     * Compares buffers by size
+     * The maximum aggregate size of the buffers in the pool. Old buffers are discarded to stay
+     * under this limit.
      */
+    private final int mSizeLimit;
+
+    /** Compares buffers by size */
     protected static final Comparator<byte[]> BUF_COMPARATOR = new Comparator<byte[]>() {
         @Override
         public int compare(byte[] lhs, byte[] rhs) {
             return lhs.length - rhs.length;
         }
     };
-    /**
-     * The maximum aggregate size of the buffers in the pool. Old buffers are discarded to stay
-     * under this limit.
-     */
-    private final int mSizeLimit;
-    /**
-     * The buffer pool, arranged both by last use and by buffer size
-     */
-    private List<byte[]> mBuffersByLastUse = new LinkedList<byte[]>();
-    private List<byte[]> mBuffersBySize = new ArrayList<byte[]>(64);
-    /**
-     * The total size of the buffers in the pool
-     */
-    private int mCurrentSize = 0;
 
     /**
      * @param sizeLimit the maximum size of the pool, in bytes
@@ -88,7 +85,7 @@ public class ByteArrayPool {
      * one if a pooled one is not available.
      *
      * @param len the minimum size, in bytes, of the requested buffer. The returned buffer may be
-     *            larger.
+     *        larger.
      * @return a byte[] buffer is always returned.
      */
     public synchronized byte[] getBuf(int len) {

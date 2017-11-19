@@ -5,6 +5,7 @@
 package org.opencv.ml;
 
 
+
 public class Ml {
 
     public static final int
@@ -15,6 +16,8 @@ public class Ml {
             TRAIN_ERROR = 1,
             ROW_SAMPLE = 0,
             COL_SAMPLE = 1;
+
+
 
 
 }

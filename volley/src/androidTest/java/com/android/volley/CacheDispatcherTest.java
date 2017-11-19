@@ -29,13 +29,14 @@ import junit.framework.TestCase;
 @MediumTest
 @SuppressWarnings("rawtypes")
 public class CacheDispatcherTest extends TestCase {
-    private static final long TIMEOUT_MILLIS = 5000;
     private CacheDispatcher mDispatcher;
     private WaitableQueue mCacheQueue;
     private WaitableQueue mNetworkQueue;
     private MockCache mCache;
     private MockResponseDelivery mDelivery;
     private MockRequest mRequest;
+
+    private static final long TIMEOUT_MILLIS = 5000;
 
     @Override
     protected void setUp() throws Exception {

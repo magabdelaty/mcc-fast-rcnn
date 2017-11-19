@@ -33,24 +33,24 @@ import android.content.Context;
  * the hardware model details will be the same modulo the coefficients.
  */
 public class PassionPowerCalculator extends DreamPowerCalculator {
-    public PassionPowerCalculator(Context context) {
-        super(new PassionConstants(context));
-    }
+  public PassionPowerCalculator(Context context) {
+    super(new PassionConstants(context));
+  }
 
-    public PassionPowerCalculator(PhoneConstants coeffs) {
-        super(coeffs);
-    }
+  public PassionPowerCalculator(PhoneConstants coeffs) {
+    super(coeffs);
+  }
 
-    @Override
-    public double getOledPower(OledData data) {
-        if (!data.screenOn) {
-            return 0;
-        }
-        if (data.pixPower == -1) {
+  @Override
+  public double getOledPower(OledData data) {
+    if(!data.screenOn) {
+      return 0;
+    }
+    if(data.pixPower == -1) {
       /* No pixel power available :(. */
-            return coeffs.oledBasePower() + coeffs.lcdBrightness() * data.brightness;
-        } else {
-            return coeffs.oledBasePower() + data.pixPower * data.brightness;
-        }
+      return coeffs.oledBasePower() + coeffs.lcdBrightness() * data.brightness;
+    } else {
+      return coeffs.oledBasePower() + data.pixPower * data.brightness;
     }
+  }
 }

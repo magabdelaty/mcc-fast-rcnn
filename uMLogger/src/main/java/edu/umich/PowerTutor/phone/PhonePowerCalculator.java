@@ -29,20 +29,20 @@ import edu.umich.PowerTutor.components.Threeg.ThreegData;
 import edu.umich.PowerTutor.components.Sensors.SensorData;
 
 public interface PhonePowerCalculator {
-    public double getLcdPower(LcdData data);
+  public double getLcdPower(LcdData data);
 
-    public double getOledPower(OledData data);
+  public double getOledPower(OledData data);
 
-    public double getCpuPower(CpuData data);
+  public double getCpuPower(CpuData data);
 
-    public double getAudioPower(AudioData data);
+  public double getAudioPower(AudioData data);
 
-    public double getGpsPower(GpsData data);
+  public double getGpsPower(GpsData data);
 
-    public double getWifiPower(WifiData data);
+  public double getWifiPower(WifiData data);
 
-    public double getThreeGPower(ThreegData data);
+  public double getThreeGPower(ThreegData data);
 
-    public double getSensorPower(SensorData data);
+  public double getSensorPower(SensorData data);
 }
 

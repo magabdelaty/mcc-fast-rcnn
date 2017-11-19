@@ -44,8 +44,9 @@ import java.util.Map;
  * An HttpStack that performs request over an {@link HttpClient}.
  */
 public class HttpClientStack implements HttpStack {
-    private final static String HEADER_CONTENT_TYPE = "Content-Type";
     protected final HttpClient mClient;
+
+    private final static String HEADER_CONTENT_TYPE = "Content-Type";
 
     public HttpClientStack(HttpClient client) {
         mClient = client;
@@ -66,12 +67,28 @@ public class HttpClientStack implements HttpStack {
         return result;
     }
 
+    @Override
+    public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
+            throws IOException, AuthFailureError {
+        HttpUriRequest httpRequest = createHttpRequest(request, additionalHeaders);
+        addHeaders(httpRequest, additionalHeaders);
+        addHeaders(httpRequest, request.getHeaders());
+        onPrepareRequest(httpRequest);
+        HttpParams httpParams = httpRequest.getParams();
+        int timeoutMs = request.getTimeoutMs();
+        // TODO: Reevaluate this connection timeout based on more wide-scale
+        // data collection and possibly different for wifi vs. 3G.
+        HttpConnectionParams.setConnectionTimeout(httpParams, 5000);
+        HttpConnectionParams.setSoTimeout(httpParams, timeoutMs);
+        return mClient.execute(httpRequest);
+    }
+
     /**
      * Creates the appropriate subclass of HttpUriRequest for passed in request.
      */
     @SuppressWarnings("deprecation")
     /* protected */ static HttpUriRequest createHttpRequest(Request<?> request,
-                                                            Map<String, String> additionalHeaders) throws AuthFailureError {
+            Map<String, String> additionalHeaders) throws AuthFailureError {
         switch (request.getMethod()) {
             case Method.DEPRECATED_GET_OR_POST: {
                 // This is the deprecated way that needs to be handled for backwards compatibility.
@@ -111,7 +128,7 @@ public class HttpClientStack implements HttpStack {
     }
 
     private static void setEntityIfNonEmptyBody(HttpEntityEnclosingRequestBase httpRequest,
-                                                Request<?> request) throws AuthFailureError {
+            Request<?> request) throws AuthFailureError {
         byte[] body = request.getBody();
         if (body != null) {
             HttpEntity entity = new ByteArrayEntity(body);
@@ -119,25 +136,9 @@ public class HttpClientStack implements HttpStack {
         }
     }
 
-    @Override
-    public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
-            throws IOException, AuthFailureError {
-        HttpUriRequest httpRequest = createHttpRequest(request, additionalHeaders);
-        addHeaders(httpRequest, additionalHeaders);
-        addHeaders(httpRequest, request.getHeaders());
-        onPrepareRequest(httpRequest);
-        HttpParams httpParams = httpRequest.getParams();
-        int timeoutMs = request.getTimeoutMs();
-        // TODO: Reevaluate this connection timeout based on more wide-scale
-        // data collection and possibly different for wifi vs. 3G.
-        HttpConnectionParams.setConnectionTimeout(httpParams, 5000);
-        HttpConnectionParams.setSoTimeout(httpParams, timeoutMs);
-        return mClient.execute(httpRequest);
-    }
-
     /**
      * Called before the request is executed using the underlying HttpClient.
-     * <p>
+     *
      * <p>Overwrite in subclasses to augment the request.</p>
      */
     protected void onPrepareRequest(HttpUriRequest request) throws IOException {

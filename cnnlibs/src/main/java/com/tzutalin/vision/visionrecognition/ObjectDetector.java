@@ -31,25 +31,24 @@ import java.util.List;
  * Identifies and locate the specified objects in a
  * {@link android.graphics.Bitmap} graphic object.
  */
-public class ObjectDetector extends CaffeClassifier<List<VisionDetRet>> {
+public class ObjectDetector extends CaffeClassifier <List<VisionDetRet>>{
     private static final String TAG = "ObjectDetector";
     private ByteBuffer _handler;
 
     /**
      * Creates a ObjectDetector, configured with its model path, trained weights, etc.
      * These parameters cannot be changed once the object is constructed.
-     *
-     * @param context     Context
-     * @param modelPath   Caffe's model
+     * @param context Context
+     * @param modelPath Caffe's model
      * @param wieghtsPath Caffe's trained wieght
-     * @param manefile    The file path of the image image
-     * @param synsetFile  The file path to load label's titles
+     * @param manefile The file path of the image image
+     * @param synsetFile The file path to load label's titles
      */
     public ObjectDetector(Context context, String modelPath, String wieghtsPath, String manefile, String synsetFile) throws IllegalAccessException {
         super(context, modelPath, wieghtsPath, manefile, synsetFile);
         if (!new File(mModelPath).exists() ||
                 !new File(mWeightsPath).exists() ||
-                !new File(mSynsetPath).exists()) {
+                !new File(mSynsetPath).exists() ) {
             throw new IllegalAccessException("ObjectDetector cannot find model");
         }
     }
@@ -80,12 +79,11 @@ public class ObjectDetector extends CaffeClassifier<List<VisionDetRet>> {
 
     /**
      * Detect and locate objects according to the given image path
-     *
      * @param imgPath image path
      * @return The list of the result {@link VisionDetRet} which objected are detected
      * @throws IllegalArgumentException if the Bitmap dimensions don't match
-     *                                  the dimensions defined at initialization or the given array
-     *                                  is not sized equal to the width and hegiht defined at initialization
+     *               the dimensions defined at initialization or the given array
+     *               is not sized equal to the width and hegiht defined at initialization
      */
     @Override
     public List<VisionDetRet> classifyByPath(String imgPath) {
@@ -109,12 +107,11 @@ public class ObjectDetector extends CaffeClassifier<List<VisionDetRet>> {
 
     /**
      * Detect and locate objects according to the given bitmap
-     *
      * @param bitmap bitmap object {@link android.graphics.Bitmap} graphic object.
      * @return The list of the result {@link VisionDetRet} which objected are detected
      * @throws IllegalArgumentException if the Bitmap dimensions don't match
-     *                                  the dimensions defined at initialization or the given array
-     *                                  is not sized equal to the width and hegiht defined at initialization
+     *               the dimensions defined at initialization or the given array
+     *               is not sized equal to the width and hegiht defined at initialization
      */
     @Override
     public List<VisionDetRet> classify(Bitmap bitmap) {

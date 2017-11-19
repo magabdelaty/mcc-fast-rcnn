@@ -10,16 +10,17 @@ import org.opencv.core.Algorithm;
 //javadoc: BaseCascadeClassifier
 public class BaseCascadeClassifier extends Algorithm {
 
-    protected BaseCascadeClassifier(long addr) {
-        super(addr);
-    }
+    protected BaseCascadeClassifier(long addr) { super(addr); }
 
-    // native support for java finalize()
-    private static native void delete(long nativeObj);
 
     @Override
     protected void finalize() throws Throwable {
         delete(nativeObj);
     }
+
+
+
+    // native support for java finalize()
+    private static native void delete(long nativeObj);
 
 }

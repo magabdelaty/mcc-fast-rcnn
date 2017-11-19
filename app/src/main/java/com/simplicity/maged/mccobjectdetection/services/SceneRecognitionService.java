@@ -69,7 +69,7 @@ public class SceneRecognitionService {
                 mClassifier = VisionClassifierCreator.createSceneClassifier(context);
                 Log.d(TAG, "Start Load model");
                 // TODO : Fix it
-                mClassifier.init(224, 224);  // init once
+                mClassifier.init(224,224);  // init once
                 Log.d(TAG, "End Load model");
             } catch (IllegalAccessException e) {
                 Log.e(TAG, e.toString());

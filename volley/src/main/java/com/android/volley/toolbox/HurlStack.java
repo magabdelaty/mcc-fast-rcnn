@@ -49,6 +49,18 @@ import javax.net.ssl.SSLSocketFactory;
 public class HurlStack implements HttpStack {
 
     private static final String HEADER_CONTENT_TYPE = "Content-Type";
+
+    /**
+     * An interface for transforming URLs before use.
+     */
+    public interface UrlRewriter {
+        /**
+         * Returns a URL to use instead of the provided one, or null to indicate
+         * this URL should not be used at all.
+         */
+        public String rewriteUrl(String originalUrl);
+    }
+
     private final UrlRewriter mUrlRewriter;
     private final SSLSocketFactory mSslSocketFactory;
 
@@ -64,7 +76,7 @@ public class HurlStack implements HttpStack {
     }
 
     /**
-     * @param urlRewriter      Rewriter to use for request URLs
+     * @param urlRewriter Rewriter to use for request URLs
      * @param sslSocketFactory SSL factory to use for HTTPS connections
      */
     public HurlStack(UrlRewriter urlRewriter, SSLSocketFactory sslSocketFactory) {
@@ -72,9 +84,49 @@ public class HurlStack implements HttpStack {
         mSslSocketFactory = sslSocketFactory;
     }
 
+    @Override
+    public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
+            throws IOException, AuthFailureError {
+        String url = request.getUrl();
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.putAll(request.getHeaders());
+        map.putAll(additionalHeaders);
+        if (mUrlRewriter != null) {
+            String rewritten = mUrlRewriter.rewriteUrl(url);
+            if (rewritten == null) {
+                throw new IOException("URL blocked by rewriter: " + url);
+            }
+            url = rewritten;
+        }
+        URL parsedUrl = new URL(url);
+        HttpURLConnection connection = openConnection(parsedUrl, request);
+        for (String headerName : map.keySet()) {
+            connection.addRequestProperty(headerName, map.get(headerName));
+        }
+        setConnectionParametersForRequest(connection, request);
+        // Initialize HttpResponse with data from the HttpURLConnection.
+        ProtocolVersion protocolVersion = new ProtocolVersion("HTTP", 1, 1);
+        int responseCode = connection.getResponseCode();
+        if (responseCode == -1) {
+            // -1 is returned by getResponseCode() if the response code could not be retrieved.
+            // Signal to the caller that something was wrong with the connection.
+            throw new IOException("Could not retrieve response code from HttpUrlConnection.");
+        }
+        StatusLine responseStatus = new BasicStatusLine(protocolVersion,
+                connection.getResponseCode(), connection.getResponseMessage());
+        BasicHttpResponse response = new BasicHttpResponse(responseStatus);
+        response.setEntity(entityFromConnection(connection));
+        for (Entry<String, List<String>> header : connection.getHeaderFields().entrySet()) {
+            if (header.getKey() != null) {
+                Header h = new BasicHeader(header.getKey(), header.getValue().get(0));
+                response.addHeader(h);
+            }
+        }
+        return response;
+    }
+
     /**
      * Initializes an {@link HttpEntity} from the given {@link HttpURLConnection}.
-     *
      * @param connection
      * @return an HttpEntity populated with data from <code>connection</code>.
      */
@@ -93,9 +145,39 @@ public class HurlStack implements HttpStack {
         return entity;
     }
 
+    /**
+     * Create an {@link HttpURLConnection} for the specified {@code url}.
+     */
+    protected HttpURLConnection createConnection(URL url) throws IOException {
+        return (HttpURLConnection) url.openConnection();
+    }
+
+    /**
+     * Opens an {@link HttpURLConnection} with parameters.
+     * @param url
+     * @return an open connection
+     * @throws IOException
+     */
+    private HttpURLConnection openConnection(URL url, Request<?> request) throws IOException {
+        HttpURLConnection connection = createConnection(url);
+
+        int timeoutMs = request.getTimeoutMs();
+        connection.setConnectTimeout(timeoutMs);
+        connection.setReadTimeout(timeoutMs);
+        connection.setUseCaches(false);
+        connection.setDoInput(true);
+
+        // use caller-provided custom SslSocketFactory, if any, for HTTPS
+        if ("https".equals(url.getProtocol()) && mSslSocketFactory != null) {
+            ((HttpsURLConnection)connection).setSSLSocketFactory(mSslSocketFactory);
+        }
+
+        return connection;
+    }
+
     @SuppressWarnings("deprecation")
     /* package */ static void setConnectionParametersForRequest(HttpURLConnection connection,
-                                                                Request<?> request) throws IOException, AuthFailureError {
+            Request<?> request) throws IOException, AuthFailureError {
         switch (request.getMethod()) {
             case Method.DEPRECATED_GET_OR_POST:
                 // This is the deprecated way that needs to be handled for backwards compatibility.
@@ -146,88 +228,5 @@ public class HurlStack implements HttpStack {
             out.write(body);
             out.close();
         }
-    }
-
-    @Override
-    public HttpResponse performRequest(Request<?> request, Map<String, String> additionalHeaders)
-            throws IOException, AuthFailureError {
-        String url = request.getUrl();
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.putAll(request.getHeaders());
-        map.putAll(additionalHeaders);
-        if (mUrlRewriter != null) {
-            String rewritten = mUrlRewriter.rewriteUrl(url);
-            if (rewritten == null) {
-                throw new IOException("URL blocked by rewriter: " + url);
-            }
-            url = rewritten;
-        }
-        URL parsedUrl = new URL(url);
-        HttpURLConnection connection = openConnection(parsedUrl, request);
-        for (String headerName : map.keySet()) {
-            connection.addRequestProperty(headerName, map.get(headerName));
-        }
-        setConnectionParametersForRequest(connection, request);
-        // Initialize HttpResponse with data from the HttpURLConnection.
-        ProtocolVersion protocolVersion = new ProtocolVersion("HTTP", 1, 1);
-        int responseCode = connection.getResponseCode();
-        if (responseCode == -1) {
-            // -1 is returned by getResponseCode() if the response code could not be retrieved.
-            // Signal to the caller that something was wrong with the connection.
-            throw new IOException("Could not retrieve response code from HttpUrlConnection.");
-        }
-        StatusLine responseStatus = new BasicStatusLine(protocolVersion,
-                connection.getResponseCode(), connection.getResponseMessage());
-        BasicHttpResponse response = new BasicHttpResponse(responseStatus);
-        response.setEntity(entityFromConnection(connection));
-        for (Entry<String, List<String>> header : connection.getHeaderFields().entrySet()) {
-            if (header.getKey() != null) {
-                Header h = new BasicHeader(header.getKey(), header.getValue().get(0));
-                response.addHeader(h);
-            }
-        }
-        return response;
-    }
-
-    /**
-     * Create an {@link HttpURLConnection} for the specified {@code url}.
-     */
-    protected HttpURLConnection createConnection(URL url) throws IOException {
-        return (HttpURLConnection) url.openConnection();
-    }
-
-    /**
-     * Opens an {@link HttpURLConnection} with parameters.
-     *
-     * @param url
-     * @return an open connection
-     * @throws IOException
-     */
-    private HttpURLConnection openConnection(URL url, Request<?> request) throws IOException {
-        HttpURLConnection connection = createConnection(url);
-
-        int timeoutMs = request.getTimeoutMs();
-        connection.setConnectTimeout(timeoutMs);
-        connection.setReadTimeout(timeoutMs);
-        connection.setUseCaches(false);
-        connection.setDoInput(true);
-
-        // use caller-provided custom SslSocketFactory, if any, for HTTPS
-        if ("https".equals(url.getProtocol()) && mSslSocketFactory != null) {
-            ((HttpsURLConnection) connection).setSSLSocketFactory(mSslSocketFactory);
-        }
-
-        return connection;
-    }
-
-    /**
-     * An interface for transforming URLs before use.
-     */
-    public interface UrlRewriter {
-        /**
-         * Returns a URL to use instead of the provided one, or null to indicate
-         * this URL should not be used at all.
-         */
-        public String rewriteUrl(String originalUrl);
     }
 }

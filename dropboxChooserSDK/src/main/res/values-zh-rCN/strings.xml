@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:dbx="https://android.dropbox.com/StringsSchema">
+<?xml version="1.0" encoding="utf-8"?><resources xmlns:dbx="https://android.dropbox.com/StringsSchema">
     <string name="dbx_install_main">请安装 Dropbox 应用</string>
     <string name="dbx_install_sub">安装了 Dropbox 之后，您就可以在最喜欢的应用（比如此应用）中访问所有文件了！</string>
     <string name="dbx_install">安装 Dropbox</string>

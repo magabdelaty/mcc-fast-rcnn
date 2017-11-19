@@ -11,7 +11,7 @@ import com.android.volley.toolbox.HurlStack;
 
 public class SingletonVolleyRequestQueue {
 
-    private static SingletonVolleyRequestQueue mInstance;
+	private static SingletonVolleyRequestQueue mInstance;
     private static Context mCtx;
     private RequestQueue mRequestQueue;
 
